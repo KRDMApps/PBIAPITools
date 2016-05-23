@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using PBIAPITools.Models;
 
 namespace PBIAPITools
 {
@@ -23,8 +25,11 @@ namespace PBIAPITools
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc();
+            services.AddSession();
+            services.AddDistributedMemoryCache();
+            services.AddOptions();
+            //services.Configure<AppConfig>(Configuration.GetSection("AppConfig"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,13 +48,14 @@ namespace PBIAPITools
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
             });
         }
     }

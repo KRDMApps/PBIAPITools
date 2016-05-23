@@ -9,44 +9,31 @@
         <!-- Css -->
         <link rel="stylesheet" asp-href-include="~/css/*.css">
         <!-- Js -->
-        <script src="~/lib/jquery.js"></script>
-        <script src="~/lib/bootstrap.js"></script>
-        <script src="~/lib/system.js"></script>
-        <script src="~/lib/rx.js"></script>
-        <script src="~/lib/typescript.js"></script>
-        <script src="~/lib/angular2/angular2.dev.js"></script>
-        <script src="~/lib/angular2/angular2-polyfills.js"></script>
-        <script src="~/lib/angular2/http.dev.js"></script>
-        <script src="~/lib/angular2/router.dev.js"></script>
+        <script src="~/js/es6-shim/es6-shim.min.js"></script>
+        <script src="~/js/zone.js/dist/zone.js"></script>
+        <script src="~/js/reflect-metadata/Reflect.js"></script>
+        <script src="~/js/systemjs/dist/system.src.js"></script>
+        <script src="~/js/jquery/dist/jquery.js"></script>
+        <script src="~/js/bootstrap/dist/js/bootstrap.js"></script>
     </environment>
 
     <environment names="Production">
         <!-- Css -->
         <link rel="stylesheet" asp-href-include="~/css/*.min.css" asp-append-version="true">
         <!-- Js -->
-        <script src="~/lib/jquery.min.js"></script>
-        <script src="~/lib/bootstrap.min.js"></script>
-        <script src="~/lib/system.min.js"></script>
-        <script src="~/lib/rx.min.js"></script>
-        <script src="~/lib/typescript.min.js"></script>
-        <script src="~/lib/angular2/angular2.dev.min.js"></script>
-        <script src="~/lib/angular2/angular2-polyfills.min.js"></script>
-        <script src="~/lib/angular2/http.dev.min.js"></script>
-        <script src="~/lib/angular2/router.dev.min.js"></script>
+        <script src="~/js/es6-shim/es6-shim.min.js"></script>
+        <script src="~/js/zone.js/dist/zone.js"></script>
+        <script src="~/js/reflect-metadata/Reflect.js"></script>
+        <script src="~/js/systemjs/dist/system.src.js"></script>
+        <script src="~/js/jquery/dist/jquery.js"></script>
+        <script src="~/js/bootstrap/dist/js/bootstrap.js"></script>
     </environment>
 
     <!-- Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
     <script>
-            System.config({
-                packages: {
-                    app: {
-                        format: 'register',
-                        defaultExtension: 'js'
-                    }
-                }
-            });
-            System.import('app/boot')
-                  .then(null, console.error.bind(console));
+        System.import('app/boot')
+              .then(null, console.error.bind(console));
     </script>
 </head>
 <base href="/" />
