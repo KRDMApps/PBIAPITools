@@ -2,6 +2,13 @@
 /// <reference path="js/@angular/compiler/esm/src/facade/base_wrapped_exception.j
 /// <reference path="../gulpfile.js" />
 /// <reference path="../systemjs.config.js" />
+/// <reference path="app/api.component.js" />
+/// <reference path="app/api.service.js" />
+/// <reference path="app/app.component.js" />
+/// <reference path="app/boot.js" />
+/// <reference path="app/login.component.js" />
+/// <reference path="app/redirect.component.js" />
+/// <reference path="app/static.component.js" />
 /// <reference path="js/@angular/common/common.umd.js" />
 /// <reference path="js/@angular/common/esm/index.js" />
 /// <reference path="js/@angular/common/esm/src/common_directives.js" />

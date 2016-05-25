@@ -2,8 +2,6 @@
 import {Routes, Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {StaticComponent} from "./static.component";
 import {ApiComponent} from "./api.component";
-import {RedirectComponent} from "./redirect.component";
-import {LoginComponent} from "./login.component";
 
 declare var System: any;
 
@@ -23,9 +21,6 @@ declare var System: any;
                             <li [class.active]="isActive('/index')">
                                 <a [routerLink]="['/index']">Home</a>
                             </li>
-                            <!--<li [class.active]="isActive('/login')">
-                                <a [routerLink]="['/login']">Login</a>
-                            </li>-->
                             <li [class.active]="isActive('/pbiapi')">
                                 <a [routerLink]="['/pbiapi']">PBI API</a>
                             </li>
@@ -39,8 +34,6 @@ declare var System: any;
 })
 @Routes([
     { path: '/index', component: StaticComponent },
-    { path: '/login', component: LoginComponent },
-    { path: '/redirect', component: RedirectComponent },
     { path: '/pbiapi', component: ApiComponent }
 ])
 export class PBIAPIToolsApp implements OnInit {
@@ -49,7 +42,6 @@ export class PBIAPIToolsApp implements OnInit {
     }
 
     ngOnInit() {
-        this.router.navigate(['/login']);
     }
 
     isActive(path: string): boolean {

@@ -22,3 +22,4 @@ var RedirectComponent = (function () {
     return RedirectComponent;
 }());
 exports.RedirectComponent = RedirectComponent;
+//# sourceMappingURL=redirect.component.js.map

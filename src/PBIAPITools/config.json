@@ -1,0 +1,16 @@
+﻿{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+  "AppSettings": {
+    "ClientID": "{ClientID}",
+    "ClientSecret": "{ClientSecret}",
+    "RedirectUrl": "{WebUrl}",
+    "ResourceUri":  "https://analysis.windows.net/powerbi/api"
+  }
+}

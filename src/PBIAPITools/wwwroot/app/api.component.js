@@ -52,3 +52,4 @@ var ApiComponent = (function () {
     return ApiComponent;
 }());
 exports.ApiComponent = ApiComponent;
+//# sourceMappingURL=api.component.js.map
