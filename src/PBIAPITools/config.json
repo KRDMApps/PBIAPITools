@@ -8,9 +8,10 @@
     }
   },
   "AppSettings": {
-    "ClientID": "{ClientID}",
-    "ClientSecret": "{ClientSecret}",
-    "RedirectUrl": "{WebUrl}",
-    "ResourceUri":  "https://analysis.windows.net/powerbi/api"
+    "ClientID": "",
+    "ClientSecret": "",
+    "RedirectUrl": "",
+    "ResourceUri": "https://analysis.windows.net/powerbi/api",
+    "PowerBIAPIUri": "https://api.powerbi.com"
   }
 }

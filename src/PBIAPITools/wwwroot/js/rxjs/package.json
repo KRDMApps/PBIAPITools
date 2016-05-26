@@ -1,13 +1,21 @@
 {
   "_args": [
     [
-      "rxjs@5.0.0-beta.6",
+      {
+        "name": "rxjs",
+        "raw": "rxjs@5.0.0-beta.6",
+        "rawSpec": "5.0.0-beta.6",
+        "scope": null,
+        "spec": "5.0.0-beta.6",
+        "type": "version"
+      },
       "D:\\Projects\\PBIAPITools\\src\\PBIAPITools"
     ]
   ],
   "_from": "rxjs@5.0.0-beta.6",
   "_id": "rxjs@5.0.0-beta.6",
   "_inCache": true,
+  "_installable": true,
   "_location": "/rxjs",
   "_nodeVersion": "5.0.0",
   "_npmOperationalInternal": {
@@ -53,28 +61,28 @@
   },
   "contributors": [
     {
-      "name": "Ben Lesh",
-      "email": "blesh@netflix.com"
+      "email": "blesh@netflix.com",
+      "name": "Ben Lesh"
     },
     {
-      "name": "Paul Taylor",
-      "email": "paul.e.taylor@me.com"
+      "email": "paul.e.taylor@me.com",
+      "name": "Paul Taylor"
     },
     {
-      "name": "Jeff Cross",
-      "email": "crossj@google.com"
+      "email": "crossj@google.com",
+      "name": "Jeff Cross"
     },
     {
-      "name": "Matthew Podwysocki",
-      "email": "matthewp@microsoft.com"
+      "email": "matthewp@microsoft.com",
+      "name": "Matthew Podwysocki"
     },
     {
-      "name": "OJ Kwon",
-      "email": "kwon.ohjoong@gmail.com"
+      "email": "kwon.ohjoong@gmail.com",
+      "name": "OJ Kwon"
     },
     {
-      "name": "Andre Staltz",
-      "email": "andre@staltz.com"
+      "email": "andre@staltz.com",
+      "name": "Andre Staltz"
     }
   ],
   "dependencies": {},
@@ -138,33 +146,33 @@
     "npm": ">=2.0.0"
   },
   "homepage": "https://github.com/ReactiveX/RxJS",
-  "installable": true,
   "keywords": [
-    "ES2015",
-    "ES6",
-    "Observable",
-    "Observables",
-    "ReactiveExtensions",
-    "ReactiveX",
     "Rx",
     "RxJS",
+    "ReactiveX",
+    "ReactiveExtensions",
+    "Streams",
+    "Observables",
+    "Observable",
     "Stream",
-    "Streams"
+    "ES6",
+    "ES2015"
   ],
   "license": "Apache-2.0",
   "main": "Rx.js",
   "maintainers": [
     {
-      "name": "blesh",
-      "email": "ben@benlesh.com"
+      "email": "ben@benlesh.com",
+      "name": "blesh"
     },
     {
-      "name": "jeffbcross",
-      "email": "middlefloor@gmail.com"
+      "email": "middlefloor@gmail.com",
+      "name": "jeffbcross"
     }
   ],
   "name": "rxjs",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/ReactiveX/RxJS.git"

@@ -9,8 +9,4 @@ export class ApiService {
     get(onNext: (json: any) => void) {
         this.http.get("api/pbiapi").map(response => response.text()).subscribe(onNext, err => console.error(err));
     }
-
-    login(onNext: (json: any) => void) {
-        this.http.get("api/pbiapi/login").map(response => response.json()).subscribe(onNext, err => console.error(err));
-    }
 }

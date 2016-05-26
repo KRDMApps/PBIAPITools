@@ -18,8 +18,8 @@ var ApiService = (function () {
     ApiService.prototype.get = function (onNext) {
         this.http.get("api/pbiapi").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
     };
-    ApiService.prototype.login = function (onNext) {
-        this.http.get("api/pbiapi/login").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+    ApiService.prototype.getGroups = function (onNext) {
+        this.http.get("api/pbiapi/groups").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
     };
     ApiService = __decorate([
         core_1.Injectable(), 
@@ -28,4 +28,3 @@ var ApiService = (function () {
     return ApiService;
 }());
 exports.ApiService = ApiService;
-//# sourceMappingURL=api.service.js.map

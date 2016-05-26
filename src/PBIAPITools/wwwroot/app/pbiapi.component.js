@@ -11,12 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var router_1 = require('@angular/router');
-var api_service_1 = require("./api.service");
+var pbiapi_service_1 = require("./pbiapi.service");
 var PBIApiComponent = (function () {
     function PBIApiComponent(service, router) {
         this.service = service;
         this.router = router;
-        this.apiOccurances = 0;
         this.isLoading = false;
     }
     PBIApiComponent.prototype.ngOnInit = function () {
@@ -31,32 +30,69 @@ var PBIApiComponent = (function () {
                     _this.router.navigate(['/login']);
                 }
                 _this.isLoading = false;
-                _this.apiOccurances++;
             }
         });
     };
     PBIApiComponent.prototype.getGroups = function () {
         var _this = this;
         this.isLoading = true;
-        this.service.getGroups(function (result) {
-            console.log(result);
-            if (result) {
-                console.log(result);
+        this.service.getGroups(function (groups) {
+            if (groups) {
+                _this.groups = groups.value;
+                console.log(groups.value);
                 _this.isLoading = false;
-                _this.apiOccurances++;
             }
         });
     };
+    PBIApiComponent.prototype.getDatasets = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.getDatasets(function (datasets) {
+            if (datasets) {
+                _this.datasets = datasets.value;
+                console.log(datasets.value);
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.getTables = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.getTables(function (tables) {
+            if (tables) {
+                _this.tables = tables.value;
+                console.log(tables.value);
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.clearTable = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        var test = this.service.clearTable(function (status) {
+            if (status) {
+                _this.status = status;
+                console.log(status);
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.onSelect = function (value) { };
     PBIApiComponent = __decorate([
         core_1.Component({
             selector: "pbiapi",
             templateUrl: "/partial/pbiapi",
-            providers: [api_service_1.ApiService],
+            providers: [pbiapi_service_1.PBIApiService],
             directives: common_1.CORE_DIRECTIVES
         }), 
-        __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router])
+        __metadata('design:paramtypes', [pbiapi_service_1.PBIApiService, router_1.Router])
     ], PBIApiComponent);
     return PBIApiComponent;
 }());
 exports.PBIApiComponent = PBIApiComponent;
-//# sourceMappingURL=api.component.js.map

@@ -1,23 +1,17 @@
-﻿using Glimpse;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using PBIAPITools.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PBIAPITools
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private readonly IHttpContextAccessor httpContext;
 
         public Startup(IHostingEnvironment env)
         {
@@ -36,7 +30,9 @@ namespace PBIAPITools
             services.AddSession();
             services.AddDistributedMemoryCache();
             services.AddCors();
-            services.AddGlimpse();
+            services.AddOptions();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,91 +72,15 @@ namespace PBIAPITools
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSession();
-
-            app.Map("/login", signinApp =>
+            app.UseMvc(routes =>
             {
-                signinApp.Run(async context =>
-                {
-                    string authorityUri = "https://login.windows.net/common/oauth2/authorize/";
+                routes.MapRoute(
+                    name: "login",
+                    template: "{controller=Login}/{action=Index}/{id?}");
 
-                    var url = context.Request.Query["ReturnUrl"];
-                    if (!string.IsNullOrEmpty(url) && url[0].Contains("/?code="))
-                    {
-                        //Redirect uri must match the redirect_uri used when requesting Authorization code.
-                        string redirectUri = "http://pbiapitools.azurewebsites.net";
-                        var query = QueryHelpers.ParseQuery(url);
-                        string code = query["/?code"][0];
-
-                        // Get auth token from auth code       
-                        TokenCache TC = new TokenCache();
-                        AuthenticationContext AC = new AuthenticationContext(authorityUri, TC);
-                        ClientCredential cc = new ClientCredential(Configuration["appsettings:clientid"], Configuration["appsettings:clientsecret"]);
-
-                        var AR = AC.AcquireTokenByAuthorizationCodeAsync(code, new Uri(redirectUri), cc);
-
-                        //Set Session "authResult" index string to the AuthenticationResult
-                        httpContext.HttpContext.Session.Set("access_token", System.Text.Encoding.UTF8.GetBytes(AR.Result.AccessToken));
-                        await context.Response.WriteAsync("Logged In");
-
-                        context.Response.Redirect("/index");
-                        return;
-                    }
-                    else
-                    {
-                        var parameters = new Dictionary<string, string>
-                        {
-                            //Azure AD will return an authorization code. 
-                            {"response_type", "code"},
-
-                            //Client ID is used by the application to identify themselves to the users that they are requesting permissions from. 
-                            //You get the client id when you register your Azure app.
-                            {"client_id", Configuration["appsettings:clientid"]},
-
-                            //Resource uri to the Power BI resource to be authorized
-                            {"resource", Configuration["appsettings:resourceuri"]},
-
-                            //After user authenticates, Azure AD will redirect back to the web app
-                            {"redirect_uri", Configuration["appsettings:redirecturl"]}
-                        };
-
-                        //Create sign-in query string
-                        //Authority Uri is an Azure resource that takes a client id to get an Access token
-                        var queryString = QueryHelpers.AddQueryString(authorityUri, parameters);
-
-                        //Redirect authority
-                        context.Response.Redirect(queryString);
-                    }
-                });
-            });
-
-            // Display the remote error
-            app.Map("/error", errorApp =>
-            {
-                errorApp.Run(async context =>
-                {
-                    context.Response.ContentType = "text/html";
-                    await context.Response.WriteAsync("<html><body>");
-                    await context.Response.WriteAsync("An remote failure has occurred: " + context.Request.Query["FailureMessage"] + "<br>");
-                    await context.Response.WriteAsync("<a href=\"/\">Home</a>");
-                    await context.Response.WriteAsync("</body></html>");
-                });
-            });
-
-            app.Run(async context =>
-            {
-                // Try to get access token from session
-                var result = await Task.FromResult(httpContext.HttpContext.Session.Get("access_token"));
-
-                if (result != null && !string.IsNullOrEmpty(Encoding.UTF8.GetString(result)))
-                {
-                    // Logged in... redirect to home
-                    context.Response.Redirect("/index");
-                }
-                else
-                {
-                    // Not logged in... redirect to login
-                    context.Response.Redirect("/login");
-                }
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,10 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Routes, Router, ROUTER_DIRECTIVES} from '@angular/router';
-import {StaticComponent} from "./static.component";
-import {ApiComponent} from "./api.component";
-import {RedirectComponent} from "./redirect.component";
-import {LoginComponent} from "./login.component";
-
+import {PBIApiComponent} from "./pbiapi.component";
 declare var System: any;
 
 @Component({
@@ -20,14 +16,8 @@ declare var System: any;
                             </a>
                         </div>
                         <ul class="nav navbar-nav">
-                            <li [class.active]="isActive('/index')">
-                                <a [routerLink]="['/index']">Home</a>
-                            </li>
-                            <!--<li [class.active]="isActive('/login')">
-                                <a [routerLink]="['/login']">Login</a>
-                            </li>-->
-                            <li [class.active]="isActive('/pbiapi')">
-                                <a [routerLink]="['/pbiapi']">PBI API</a>
+                            <li [class.active]="isActive('/home')">
+                                <a [routerLink]="['/home']">Home</a>
                             </li>
                         </ul>
                     </div>
@@ -38,10 +28,8 @@ declare var System: any;
     directives: [ROUTER_DIRECTIVES]
 })
 @Routes([
-    { path: '/index', component: StaticComponent },
-    { path: '/login', component: LoginComponent },
-    { path: '/redirect', component: RedirectComponent },
-    { path: '/pbiapi', component: ApiComponent }
+    { path: '/home', component: PBIApiComponent },
+    { path: '/Home', component: PBIApiComponent }
 ])
 export class PBIAPIToolsApp implements OnInit {
     constructor(private router: Router) {
@@ -49,10 +37,9 @@ export class PBIAPIToolsApp implements OnInit {
     }
 
     ngOnInit() {
-        this.router.navigate(['/login']);
     }
 
     isActive(path: string): boolean {
-        return (this.router.serializeUrl(this.router.urlTree) === path);
+        return (this.router.serializeUrl(this.router.urlTree).toLowerCase() === path.toLowerCase());
     }
 }

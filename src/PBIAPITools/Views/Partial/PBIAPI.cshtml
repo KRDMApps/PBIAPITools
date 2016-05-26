@@ -18,8 +18,29 @@
     </style>
 
     <div class="grey-border">
-        <button type="button" (click)="get()" class="btn btn-primary">
-            Perform Web API 2, Http-GET  <span class="badge">{{apiOccurances}}</span>
+        <button type="button" (click)="getGroups()" class="btn btn-primary">
+            Get Groups
+        </button>
+        <select [(ngModel)]="groupId" (change)="onSelect($event.target.value)">
+            <option *ngFor="let group of groups" [value]="group.Id">{{group.Name}}</option>
+        </select>
+        <div>selection={{groupId}}</div>
+        <button type="button" (click)="getDatasets()" class="btn btn-primary">
+            Get Datasets
+        </button>
+        <select [(ngModel)]="datasetId" (change)="onSelect($event.target.value)">
+            <option *ngFor="let dataset of datasets" [value]="dataset.Id">{{dataset.Name}}</option>
+        </select>
+        <div>selection={{datasetId}}</div>
+        <button type="button" (click)="getTables()" class="btn btn-primary">
+            Get Tables
+        </button>
+        <select [(ngModel)]="tableName" (change)="onSelect($event.target.value)">
+            <option *ngFor="let table of tables" [value]="table.Name">{{table.Name}}</option>
+        </select>
+        <div>selection={{tableName}}</div>
+        <button type="button" (click)="clearTable()" class="btn btn-primary">
+            Clear Table
         </button>
         <span *ngIf="isLoading">Loading...</span>
     </div>

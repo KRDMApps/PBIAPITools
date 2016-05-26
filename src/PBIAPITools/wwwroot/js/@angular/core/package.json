@@ -1,13 +1,21 @@
 {
   "_args": [
     [
-      "@angular/core@2.0.0-rc.1",
+      {
+        "name": "@angular/core",
+        "raw": "@angular/core@2.0.0-rc.1",
+        "rawSpec": "2.0.0-rc.1",
+        "scope": "@angular",
+        "spec": "2.0.0-rc.1",
+        "type": "version"
+      },
       "D:\\Projects\\PBIAPITools\\src\\PBIAPITools"
     ]
   ],
   "_from": "@angular/core@2.0.0-rc.1",
   "_id": "@angular/core@2.0.0-rc.1",
   "_inCache": true,
+  "_installable": true,
   "_location": "/@angular/core",
   "_nodeVersion": "5.4.1",
   "_npmOperationalInternal": {
@@ -47,14 +55,13 @@
     "shasum": "34e381faffb60fc12e8ac9887badb252550907e0",
     "tarball": "https://registry.npmjs.org/@angular/core/-/core-2.0.0-rc.1.tgz"
   },
-  "installable": true,
   "jsnext:main": "esm/index.js",
   "license": "MIT",
   "main": "index.js",
   "maintainers": [
     {
-      "name": "angular",
-      "email": "angular-core+npm@google.com"
+      "email": "angular-core+npm@google.com",
+      "name": "angular"
     }
   ],
   "name": "@angular/core",
@@ -63,6 +70,7 @@
     "rxjs": "5.0.0-beta.6",
     "zone.js": "^0.6.6"
   },
+  "readme": "ERROR: No README data found!",
   "scripts": {},
   "typings": "index.d.ts",
   "version": "2.0.0-rc.1"

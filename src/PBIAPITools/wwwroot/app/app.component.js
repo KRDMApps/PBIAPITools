@@ -10,8 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
-var static_component_1 = require("./static.component");
-var api_component_1 = require("./api.component");
+var pbiapi_component_1 = require("./pbiapi.component");
 var PBIAPIToolsApp = (function () {
     function PBIAPIToolsApp(router) {
         this.router = router;
@@ -20,21 +19,20 @@ var PBIAPIToolsApp = (function () {
     PBIAPIToolsApp.prototype.ngOnInit = function () {
     };
     PBIAPIToolsApp.prototype.isActive = function (path) {
-        return (this.router.serializeUrl(this.router.urlTree) === path);
+        return (this.router.serializeUrl(this.router.urlTree).toLowerCase() === path.toLowerCase());
     };
     PBIAPIToolsApp = __decorate([
         core_1.Component({
             selector: "app",
-            template: "<div class=\"page-header\">\n                    <h1>PowerBI API Tools</h1>\n                </div>\n                <nav class=\"navbar navbar-inverse\">\n                    <div class=\"container-fluid\">\n                        <div class=\"navbar-header\">\n                            <a class=\"navbar-brand\" href=\"#\">\n                                <span class=\"glyphicon glyphicon-sunglasses\"></span>\n                            </a>\n                        </div>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/index')\">\n                                <a [routerLink]=\"['/index']\">Home</a>\n                            </li>\n                            <li [class.active]=\"isActive('/pbiapi')\">\n                                <a [routerLink]=\"['/pbiapi']\">PBI API</a>\n                            </li>\n                        </ul>\n                    </div>\n                </nav>\n                <div class=\"content padding has-header\">\n                    <router-outlet></router-outlet>\n                </div>",
+            template: "<div class=\"page-header\">\n                    <h1>PowerBI API Tools</h1>\n                </div>\n                <nav class=\"navbar navbar-inverse\">\n                    <div class=\"container-fluid\">\n                        <div class=\"navbar-header\">\n                            <a class=\"navbar-brand\" href=\"#\">\n                                <span class=\"glyphicon glyphicon-sunglasses\"></span>\n                            </a>\n                        </div>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/home')\">\n                                <a [routerLink]=\"['/home']\">Home</a>\n                            </li>\n                        </ul>\n                    </div>\n                </nav>\n                <div class=\"content padding has-header\">\n                    <router-outlet></router-outlet>\n                </div>",
             directives: [router_1.ROUTER_DIRECTIVES]
         }),
         router_1.Routes([
-            { path: '/index', component: static_component_1.StaticComponent },
-            { path: '/pbiapi', component: api_component_1.ApiComponent }
+            { path: '/home', component: pbiapi_component_1.PBIApiComponent },
+            { path: '/Home', component: pbiapi_component_1.PBIApiComponent }
         ]), 
         __metadata('design:paramtypes', [router_1.Router])
     ], PBIAPIToolsApp);
     return PBIAPIToolsApp;
 }());
 exports.PBIAPIToolsApp = PBIAPIToolsApp;
-//# sourceMappingURL=app.component.js.map

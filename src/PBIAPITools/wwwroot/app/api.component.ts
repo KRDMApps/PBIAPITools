@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
+import {Router} from '@angular/router';
 import {ApiService} from "./api.service";
 
 @Component({
@@ -14,7 +15,7 @@ export class ApiComponent implements OnInit {
     result: any[][];
     isLoading: boolean = false;
 
-    constructor(private service: ApiService) { }
+    constructor(private service: ApiService, private router: Router) { }
 
     ngOnInit() {
         this.get();
@@ -27,13 +28,7 @@ export class ApiComponent implements OnInit {
             if (atResult) {
                 console.error(atResult);
                 if (atResult == "unauthenticated") {
-                    this.service.login(loginResult => {
-                        console.error(loginResult);
-                        this.result = loginResult;
-                        this.isLoading = false;
-                        this.apiOccurances++;
-                    });
-                }
+                    this.router.navigate(['/login']);                }
                 this.isLoading = false;
                 this.apiOccurances++;
             }

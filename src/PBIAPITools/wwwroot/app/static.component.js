@@ -25,4 +25,3 @@ var StaticComponent = (function () {
     return StaticComponent;
 }());
 exports.StaticComponent = StaticComponent;
-//# sourceMappingURL=static.component.js.map
