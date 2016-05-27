@@ -39,7 +39,7 @@ var PBIApiComponent = (function () {
         this.service.getGroups(function (groups) {
             if (groups) {
                 _this.groups = groups.value;
-                console.log(groups.value);
+                _this.groupId = "0";
                 _this.isLoading = false;
             }
         });
@@ -48,10 +48,52 @@ var PBIApiComponent = (function () {
         var _this = this;
         this.isLoading = true;
         this.service.groupId = this.groupId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.getDatasets(function (datasets) {
             if (datasets) {
                 _this.datasets = datasets.value;
-                console.log(datasets.value);
+                _this.datasetId = _this.datasets[0]["Id"];
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.deleteDataset = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.deleteDataset(function (status) {
+            if (status) {
+                _this.status = status;
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.createDataset = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        // Todo
+        this.service.datasetSchema = "";
+        this.service.createDataset(function (status) {
+            if (status) {
+                _this.status = status;
+                _this.isLoading = false;
+                _this.getDatasets();
+            }
+        });
+    };
+    PBIApiComponent.prototype.setRetentionPolicy = function (policy) {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.policy = policy;
+        this.service.setRetentionPolicy(function (status) {
+            if (status) {
+                _this.status = status;
                 _this.isLoading = false;
             }
         });
@@ -61,10 +103,43 @@ var PBIApiComponent = (function () {
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.getTables(function (tables) {
             if (tables) {
                 _this.tables = tables.value;
-                console.log(tables.value);
+                _this.tableName = _this.tables[0]["Name"];
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.updateTableSchema = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        // Todo
+        this.service.tableSchema = "";
+        this.service.updateTableSchema(function (status) {
+            if (status) {
+                _this.status = status;
+                _this.isLoading = false;
+            }
+        });
+    };
+    PBIApiComponent.prototype.addTableRows = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        // Todo
+        this.service.tableRows = "";
+        this.service.addTableRows(function (status) {
+            if (status) {
+                _this.status = status;
                 _this.isLoading = false;
             }
         });
@@ -75,15 +150,14 @@ var PBIApiComponent = (function () {
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
-        var test = this.service.clearTable(function (status) {
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.clearTable(function (status) {
             if (status) {
                 _this.status = status;
-                console.log(status);
                 _this.isLoading = false;
             }
         });
     };
-    PBIApiComponent.prototype.onSelect = function (value) { };
     PBIApiComponent = __decorate([
         core_1.Component({
             selector: "pbiapi",

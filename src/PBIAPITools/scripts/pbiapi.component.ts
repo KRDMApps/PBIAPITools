@@ -15,9 +15,11 @@ export class PBIApiComponent implements OnInit {
     datasets: any[][];
     tables: any[][];
     status: any[][];
-    groupId: any;
-    datasetId: any;
-    tableName: any;
+    groupId: string;
+    datasetId: string;
+    tableName: string;
+    tableSchema: string;
+    datasetSchema: string;
     isLoading: boolean = false;
 
     constructor(private service: PBIApiService, private router: Router) { }
@@ -43,7 +45,7 @@ export class PBIApiComponent implements OnInit {
         this.service.getGroups(groups => {
             if (groups) {
                 this.groups = groups.value;
-                console.log(groups.value);
+                this.groupId = "0";
                 this.isLoading = false;
             }
         });
@@ -52,10 +54,52 @@ export class PBIApiComponent implements OnInit {
     getDatasets() {
         this.isLoading = true;
         this.service.groupId = this.groupId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.getDatasets(datasets => {
             if (datasets) {
                 this.datasets = datasets.value;
-                console.log(datasets.value);
+                this.datasetId = this.datasets[0]["Id"];
+                this.isLoading = false;
+            }
+        });
+    }
+
+    deleteDataset() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.deleteDataset(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+            }
+        });
+    }
+
+    createDataset() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        // Todo
+        this.service.datasetSchema = "";
+        this.service.createDataset(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+                this.getDatasets();
+            }
+        });
+    }
+
+    setRetentionPolicy(policy: string) {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.policy = policy;
+        this.service.setRetentionPolicy(status => {
+            if (status) {
+                this.status = status;
                 this.isLoading = false;
             }
         });
@@ -65,10 +109,43 @@ export class PBIApiComponent implements OnInit {
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.getTables(tables => {
             if (tables) {
                 this.tables = tables.value;
-                console.log(tables.value);
+                this.tableName = this.tables[0]["Name"];
+                this.isLoading = false;
+            }
+        });
+    }
+
+    updateTableSchema() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        // Todo
+        this.service.tableSchema = "";
+        this.service.updateTableSchema(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+            }
+        });
+    }
+
+    addTableRows() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        // Todo
+        this.service.tableRows = "";
+        this.service.addTableRows(status => {
+            if (status) {
+                this.status = status;
                 this.isLoading = false;
             }
         });
@@ -79,14 +156,12 @@ export class PBIApiComponent implements OnInit {
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
-        var test = this.service.clearTable(status => {
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.clearTable(status => {
             if (status) {
                 this.status = status;
-                console.log(status);
                 this.isLoading = false;
             }
         });
     }
-
-    onSelect(value: string) { }
 }

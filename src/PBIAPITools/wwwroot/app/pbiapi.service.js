@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-require("rxjs/Rx");
 var http_1 = require("@angular/http");
 var core_1 = require("@angular/core");
+require("./rxjs.operators");
 var PBIApiService = (function () {
     function PBIApiService(http) {
         this.http = http;
@@ -22,13 +22,68 @@ var PBIApiService = (function () {
         this.http.get("api/pbiapi/groups").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
     };
     PBIApiService.prototype.getDatasets = function (onNext) {
-        this.http.get("api/pbiapi/groups/" + this.groupId + "/datasets").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        if (this.useGroup) {
+            this.http.get("api/pbiapi/groups/" + this.groupId + "/datasets").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.get("api/pbiapi/datasets").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+    };
+    PBIApiService.prototype.deleteDataset = function (onNext) {
+        if (this.useGroup) {
+            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.delete("api/pbiapi/datasets/" + this.datasetId).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+    };
+    PBIApiService.prototype.createDataset = function (onNext) {
+        if (this.useGroup) {
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets", this.datasetSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.post("api/pbiapi/datasets", this.datasetSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+    };
+    PBIApiService.prototype.setRetentionPolicy = function (onNext) {
+        if (this.useGroup) {
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.policy, "").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.post("api/pbiapi/datasets/" + this.policy, "").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
     };
     PBIApiService.prototype.getTables = function (onNext) {
-        this.http.get("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        if (this.useGroup) {
+            this.http.get("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.get("api/pbiapi/datasets/" + this.datasetId + "/tables").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+    };
+    PBIApiService.prototype.updateTableSchema = function (onNext) {
+        if (this.useGroup) {
+            this.http.put("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName, this.tableSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.put("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName, this.tableSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+    };
+    PBIApiService.prototype.addTableRows = function (onNext) {
+        if (this.useGroup) {
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows", this.tableRows).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.post("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows", this.tableRows).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
     };
     PBIApiService.prototype.clearTable = function (onNext) {
-        this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+        if (this.useGroup) {
+            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
+        else {
+            this.http.delete("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
+        }
     };
     PBIApiService = __decorate([
         core_1.Injectable(), 

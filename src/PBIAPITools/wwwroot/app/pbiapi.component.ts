@@ -18,7 +18,10 @@ export class PBIApiComponent implements OnInit {
     groupId: string;
     datasetId: string;
     tableName: string;
+    tableSchema: string;
+    datasetSchema: string;
     isLoading: boolean = false;
+    useGroup: boolean = (this.groupId && this.groupId != "0" && this.groupId != "1") ? true : false;
 
     constructor(private service: PBIApiService, private router: Router) { }
 
@@ -42,43 +45,122 @@ export class PBIApiComponent implements OnInit {
         this.isLoading = true;
         this.service.getGroups(groups => {
             if (groups) {
-                console.log(groups);
+                this.groups = groups.value;
+                this.groupId = "0";
                 this.isLoading = false;
             }
         });
     }
 
-    getDatasets(groupId: string) {
+    getDatasets() {
         this.isLoading = true;
-        this.service.groupId = groupId;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.useGroup;
         this.service.getDatasets(datasets => {
             if (datasets) {
-                console.log(datasets);
+                this.datasets = datasets.value;
+                this.datasetId = this.datasets[0]["Id"];
                 this.isLoading = false;
             }
         });
     }
 
-    getTables(groupId: string, datasetId: string) {
+    deleteDataset() {
         this.isLoading = true;
-        this.service.groupId = groupId;
-        this.service.datasetId = datasetId;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.useGroup = this.useGroup;
+        this.service.deleteDataset(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+            }
+        });
+    }
+
+    createDataset() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.useGroup;
+        // Todo
+        this.service.datasetSchema = "";
+        this.service.createDataset(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+                this.getDatasets();
+            }
+        });
+    }
+
+    setRetentionPolicy(policy: string) {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.useGroup = this.useGroup;
+        this.service.policy = policy;
+        this.service.setRetentionPolicy(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+            }
+        });
+    }
+
+    getTables() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.useGroup = this.useGroup;
         this.service.getTables(tables => {
             if (tables) {
-                console.log(tables);
+                this.tables = tables.value;
+                this.tableName = this.tables[0]["Name"];
                 this.isLoading = false;
             }
         });
     }
 
-    clearTable(groupId: string, datasetId: string, tableName: string) {
+    updateTableSchema() {
         this.isLoading = true;
-        this.service.groupId = groupId;
-        this.service.datasetId = datasetId;
-        this.service.tableName = tableName;
-        var test = this.service.clearTable(status => {
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.useGroup;
+        // Todo
+        this.service.tableSchema = "";
+        this.service.updateTableSchema(status => {
             if (status) {
-                console.log(status);
+                this.status = status;
+                this.isLoading = false;
+            }
+        });
+    }
+
+    addTableRows() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.useGroup;
+        // Todo
+        this.service.tableRows = "";
+        this.service.addTableRows(status => {
+            if (status) {
+                this.status = status;
+                this.isLoading = false;
+            }
+        });
+    }
+
+    clearTable() {
+        this.isLoading = true;
+        this.service.groupId = this.groupId;
+        this.service.datasetId = this.datasetId;
+        this.service.tableName = this.tableName;
+        this.service.useGroup = this.useGroup;
+        this.service.clearTable(status => {
+            if (status) {
+                this.status = status;
                 this.isLoading = false;
             }
         });

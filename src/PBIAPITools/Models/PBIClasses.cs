@@ -1,34 +1,44 @@
-﻿namespace PBIAPITools.Models
+﻿using System.Collections.Generic;
+
+namespace PBIAPITools.Models
 {
     public class Datasets
     {
-        public dataset[] value { get; set; }
+        public List<Dataset> value { get; set; }
     }
 
-    public class dataset
+    public class Dataset
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public Table Tables { get; set; }
     }
 
     public class Tables
     {
-        public table[] value { get; set; }
+        public List<Table> value { get; set; }
     }
 
-    public class table
+    public class Table
     {
         public string Name { get; set; }
+        public List<Column> Columns { get; set; }
     }
 
     public class Groups
     {
-        public group[] value { get; set; }
+        public List<Group> value { get; set; }
     }
 
-    public class group
+    public class Group
     {
         public string Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class Column
+    {
+        public string Name { get; set; }
+        public string DataType { get; set; }
     }
 }

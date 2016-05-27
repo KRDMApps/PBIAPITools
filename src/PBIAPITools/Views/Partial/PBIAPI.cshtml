@@ -17,31 +17,87 @@
         }
     </style>
 
-    <div class="grey-border">
-        <button type="button" (click)="getGroups()" class="btn btn-primary">
-            Get Groups
-        </button>
-        <select [(ngModel)]="groupId" (change)="onSelect($event.target.value)">
-            <option *ngFor="let group of groups" [value]="group.Id">{{group.Name}}</option>
-        </select>
-        <div>selection={{groupId}}</div>
-        <button type="button" (click)="getDatasets()" class="btn btn-primary">
-            Get Datasets
-        </button>
-        <select [(ngModel)]="datasetId" (change)="onSelect($event.target.value)">
-            <option *ngFor="let dataset of datasets" [value]="dataset.Id">{{dataset.Name}}</option>
-        </select>
-        <div>selection={{datasetId}}</div>
-        <button type="button" (click)="getTables()" class="btn btn-primary">
-            Get Tables
-        </button>
-        <select [(ngModel)]="tableName" (change)="onSelect($event.target.value)">
-            <option *ngFor="let table of tables" [value]="table.Name">{{table.Name}}</option>
-        </select>
-        <div>selection={{tableName}}</div>
-        <button type="button" (click)="clearTable()" class="btn btn-primary">
-            Clear Table
-        </button>
+    <div style="height: 20px">
         <span *ngIf="isLoading">Loading...</span>
+    </div>
+    <div class="grey-border">
+        <div class="form-group">
+            <button type="button" (click)="getGroups()" class="btn btn-primary">
+                Get Groups
+            </button>
+            <select [(ngModel)]="groupId" class="form-control">
+                <option [value]="0">None</option>
+                <option *ngFor="let group of groups" [value]="group.Id">{{group.Name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" (click)="getDatasets()" class="btn btn-primary">
+                Get Datasets
+            </button>
+            <button type="button" (click)="deleteDataset()" class="btn btn-primary">
+                Delete Dataset
+            </button>
+            <button type="button" (click)="createDataset()" class="btn btn-primary">
+                Create Dataset
+            </button>
+            <button type="button" (click)="setRetentionPolicy('none')" class="btn btn-primary" title="None">
+                Set Retention Policy to None
+            </button>
+            <button type="button" (click)="setRetentionPolicy('basicFIFO')" class="btn btn-primary" title="When enabled, data will collect in a table until it hits 200,000 rows. Once the data goes beyond 200,000 rows, the oldest rows will get dropped from the dataset. This will maintain between 200,000 and 210,000 rows of only the latest data.">
+                Set Retention Policy to Basic FIFO
+            </button>
+            <select [(ngModel)]="datasetId" class="form-control">
+                <option *ngFor="let dataset of datasets" [value]="dataset.Id">{{dataset.Name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" (click)="getTables()" class="btn btn-primary">
+                Get Tables
+            </button>
+            <select [(ngModel)]="tableName" class="form-control" (changed)="getTable()">
+                <option *ngFor="let table of tables" [value]="table.Name">{{table.Name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" (click)="clearTable()" class="btn btn-primary">
+                Clear Table
+            </button>
+            <button type="button" (click)="updateTableSchema()" class="btn btn-primary">
+                Update Table Schema
+            </button>
+            <button type="button" (click)="addTableRows()" class="btn btn-primary">
+                Add Table Rows
+            </button>
+        </div>
+        <div class="contentTableWrapper">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th>Data type</th>
+                        <th>Restrictions</th>
+                    </tr>
+                    <tr>
+                        <td>Int64</td>
+                        <td>Int64.MaxValue and Int64.MinValue not allowed.</td>
+                    </tr>
+                    <tr>
+                        <td>Double</td>
+                        <td>Double.MaxValue and Double.MinValue values not allowed. NaN not supported.+Infinity and -Infinity not supported in some functions (e.g. Min, Max).</td>
+                    </tr>
+                    <tr>
+                        <td>Boolean</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td>Datetime</td>
+                        <td>During data loading we quantize values with day fractions to whole multiples of 1/300 seconds (3.33ms).</td>
+                    </tr>
+                    <tr>
+                        <td>String</td>
+                        <td>Currently allows up to 128K characters.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </pbiapi>
