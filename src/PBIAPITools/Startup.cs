@@ -76,11 +76,11 @@ namespace PBIAPITools
             {
                 routes.MapRoute(
                     name: "login",
-                    template: "{controller=Login}/{action=Index}/{id?}");
-
+                    template: "{controller=Login}/{action=Index}");
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}");
+                routes.MapSpaFallbackRoute("spa-fallback", new { controller = "Home", action = "Index" });
             });
         }
     }

@@ -6,6 +6,8 @@ var destPath = './wwwroot/js/';
 
 // Delete the dist directory
 gulp.task('clean', function () {
+    gulp.src('./wwwroot/app/')
+        .pipe(clean());
     return gulp.src(destPath)
         .pipe(clean());
 });
@@ -22,22 +24,27 @@ gulp.task("scriptsNStyles", () => {
             '@angular/**',
             'jquery/dist/**',
             'bootstrap/dist/js/**',
+            'ng2-bs3-modal/**/*.js',
     ], {
         cwd: "node_modules/**"
     })
         .pipe(gulp.dest("./wwwroot/js"));
 
-    gulp.src([
-    'node_modules/bootstrap/dist/css/**'
-    ]).pipe(gulp.dest('./wwwroot/css'));
+    //gulp.src([
+    //'node_modules/bootstrap/dist/css/**'
+    //]).pipe(gulp.dest('./wwwroot/css'));
 
     gulp.src([
     'node_modules/bootstrap/dist/fonts/**'
     ]).pipe(gulp.dest('./wwwroot/fonts'));
 
     gulp.src([
-    'scripts/*.ts'
+    'scripts/**'
     ]).pipe(gulp.dest('./wwwroot/app'));
+
+    gulp.src([
+    'system.config.js'
+    ]).pipe(gulp.dest('./wwwroot'));
 });
 
 //ts - task to transpile TypeScript files to JavaScript using Gulp-TypeScript 

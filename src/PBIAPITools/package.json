@@ -21,7 +21,7 @@
     "zone.js": "^0.6.12",
     "jquery": "2.2.4",
     "typings": "1.0.4",
-    "angular2-modal": "1.0.0"
+    "ng2-bs3-modal": "0.6.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

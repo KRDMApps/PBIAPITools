@@ -1,13 +1,22 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
-import {Router} from '@angular/router';
+import {Router} from "@angular/router";
 import {PBIApiService} from "./pbiapi.service";
+import {MODAL_DIRECTIVES, ModalResult, ModalComponent} from "ng2-bs3-modal/ng2-bs3-modal";
 
 @Component({
     selector: "pbiapi",
     templateUrl: "/partial/pbiapi",
     providers: [PBIApiService],
-    directives: CORE_DIRECTIVES
+    directives: [CORE_DIRECTIVES, MODAL_DIRECTIVES],
+    styles: [
+        `.ng-valid[required] {
+            border-left: 5px solid #5cb85c; /* green */
+        }`,
+        `.ng-invalid {
+            border-left: 5px solid #d9534f; /* red */
+        }`
+    ]
 })
 export class PBIApiComponent implements OnInit {
     result: any[][];
@@ -18,10 +27,54 @@ export class PBIApiComponent implements OnInit {
     groupId: string;
     datasetId: string;
     tableName: string;
-    tableSchema: string;
-    datasetSchema: string;
     isLoading: boolean = false;
-    useGroup: boolean = (this.groupId && this.groupId != "0" && this.groupId != "1") ? true : false;
+    openModal: ModalComponent;
+    modalContent: string;
+    confirmed: any;
+    message: string;
+    policy: string = "basicFIFO";
+    defaultTableSchema: string = `{
+        "name": "Product", "columns": 
+        [
+            { "name": "ProductID", "dataType": "Int64"},
+            { "name": "Name", "dataType": "string"},
+            { "name": "Category", "dataType": "string"},
+            { "name": "IsCompete", "dataType": "bool"},
+            { "name": "ManufacturedOn", "dataType": "DateTime"},
+            { "name": "NewColumn", "dataType": "string"}
+        ]
+    }`;
+    defaultDatasetSchema: string = `{
+        "name": "SalesMarketing",
+        "tables": 
+        [
+            {
+            "name": "Product", "columns": 
+                [
+                { "name": "ProductID", "dataType": "Int64"},
+                { "name": "Name", "dataType": "string"},
+                { "name": "Category", "dataType": "string"},
+                { "name": "IsCompete", "dataType": "bool"},
+                { "name": "ManufacturedOn", "dataType": "DateTime"}
+                ]
+            }
+        ]
+    }`;
+    defaultTableRows: string = `{
+        "rows": 
+        [
+                {
+                "ProductID":1,
+                "Name":"Adjustable Race",
+                "Category":"Components",
+                "IsCompete":true,
+                "ManufacturedOn":"07/30/2014"
+            }
+        ]
+    }`;
+    tableSchema: string = this.defaultTableSchema;
+    datasetSchema: string = this.defaultDatasetSchema;
+    tableRows: string = this.defaultTableRows;
 
     constructor(private service: PBIApiService, private router: Router) { }
 
@@ -34,7 +87,7 @@ export class PBIApiComponent implements OnInit {
         this.service.get(result => {
             if (result) {
                 if (result == "unauthenticated") {
-                    this.router.navigate(['/login']);
+                    this.router.navigate(["/login"]);
                 }
                 this.isLoading = false;
             }
@@ -42,6 +95,7 @@ export class PBIApiComponent implements OnInit {
     }
 
     getGroups() {
+        this.message = "";
         this.isLoading = true;
         this.service.getGroups(groups => {
             if (groups) {
@@ -53,9 +107,10 @@ export class PBIApiComponent implements OnInit {
     }
 
     getDatasets() {
+        this.message = "";
         this.isLoading = true;
         this.service.groupId = this.groupId;
-        this.service.useGroup = this.useGroup;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.getDatasets(datasets => {
             if (datasets) {
                 this.datasets = datasets.value;
@@ -66,51 +121,43 @@ export class PBIApiComponent implements OnInit {
     }
 
     deleteDataset() {
+        this.message = "";
+        this.openModal.dismiss();
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
-        this.service.useGroup = this.useGroup;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.deleteDataset(status => {
             if (status) {
-                this.status = status;
+                this.message = "Successfully deleted the selected dataset";
                 this.isLoading = false;
             }
         });
     }
 
     createDataset() {
+        this.message = "";
+        this.openModal.dismiss();
         this.isLoading = true;
         this.service.groupId = this.groupId;
-        this.service.useGroup = this.useGroup;
-        // Todo
-        this.service.datasetSchema = "";
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.policy = this.policy;
+        this.service.datasetSchema = JSON.stringify(JSON.parse(this.datasetSchema));
         this.service.createDataset(status => {
             if (status) {
-                this.status = status;
+                this.message = "Successfully created the dataset";
                 this.isLoading = false;
                 this.getDatasets();
             }
         });
     }
 
-    setRetentionPolicy(policy: string) {
-        this.isLoading = true;
-        this.service.groupId = this.groupId;
-        this.service.useGroup = this.useGroup;
-        this.service.policy = policy;
-        this.service.setRetentionPolicy(status => {
-            if (status) {
-                this.status = status;
-                this.isLoading = false;
-            }
-        });
-    }
-
     getTables() {
+        this.message = "";
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
-        this.service.useGroup = this.useGroup;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.getTables(tables => {
             if (tables) {
                 this.tables = tables.value;
@@ -121,48 +168,67 @@ export class PBIApiComponent implements OnInit {
     }
 
     updateTableSchema() {
+        this.message = "";
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
-        this.service.useGroup = this.useGroup;
-        // Todo
-        this.service.tableSchema = "";
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.tableSchema = JSON.stringify(JSON.parse(this.tableSchema));
         this.service.updateTableSchema(status => {
             if (status) {
-                this.status = status;
+                this.message = "Successfully updated the schema for the selected table";
                 this.isLoading = false;
             }
         });
     }
 
     addTableRows() {
+        this.message = "";
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
-        this.service.useGroup = this.useGroup;
-        // Todo
-        this.service.tableRows = "";
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
+        this.service.tableRows = JSON.stringify(JSON.parse(this.tableRows));
         this.service.addTableRows(status => {
             if (status) {
-                this.status = status;
+                this.message = "Successfully added rows to the selected table";
                 this.isLoading = false;
             }
         });
     }
 
     clearTable() {
+        this.message = "";
+        this.openModal.dismiss();
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
-        this.service.useGroup = this.useGroup;
+        this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.clearTable(status => {
             if (status) {
-                this.status = status;
+                this.message = "Successfully cleared all data from the selected table";
                 this.isLoading = false;
             }
         });
+    }
+
+    modalOpen(modal: ModalComponent, msgType: string, size: string) {
+        this.message = "";
+        this.openModal = modal;
+        this.modalContent = "";
+        switch (msgType) {
+            case "deleteDataset":
+                this.modalContent = "Are you sure you would like to delete this dataset?";
+                this.confirmed = this.deleteDataset;
+                break;
+            case "clearTable":
+                this.modalContent = "Are you sure you would like to clear this table's data?";
+                this.confirmed = this.clearTable;
+                break;
+        }
+        modal.open(size);
     }
 }

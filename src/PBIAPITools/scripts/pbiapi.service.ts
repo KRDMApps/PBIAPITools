@@ -1,4 +1,4 @@
-﻿import {Http} from "@angular/http";
+﻿import {Http, Headers, RequestOptions} from "@angular/http";
 import {Injectable} from "@angular/core";
 import "./rxjs.operators";
 
@@ -12,6 +12,8 @@ export class PBIApiService {
     datasetSchema: string;
     policy: string;
     tableRows: string;
+    headers = new Headers({ 'Content-Type': 'application/json' });
+    options = new RequestOptions({ headers: this.headers });
 
     constructor(private http: Http) { }
 
@@ -33,25 +35,17 @@ export class PBIApiService {
 
     deleteDataset(onNext: (json: any) => void) {
         if (this.useGroup) {
-            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/delete/" + this.datasetId).map(response => response.text()).subscribe(onNext, err => console.error(err));
         } else {
-            this.http.delete("api/pbiapi/datasets/" + this.datasetId).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.delete("api/pbiapi/datasets/delete/" + this.datasetId).map(response => response.text()).subscribe(onNext, err => console.error(err));
         }
     }
 
     createDataset(onNext: (json: any) => void) {
         if (this.useGroup) {
-            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets", this.datasetSchema).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/create/" + this.policy, JSON.stringify(this.datasetSchema), this.options).map(response => response.text()).subscribe(onNext, err => console.error(err));
         } else {
-            this.http.post("api/pbiapi/datasets", this.datasetSchema).map(response => response.json()).subscribe(onNext, err => console.error(err));
-        }
-    }
-
-    setRetentionPolicy(onNext: (json: any) => void) {
-        if (this.useGroup) {
-            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.policy, "").map(response => response.json()).subscribe(onNext, err => console.error(err));
-        } else {
-            this.http.post("api/pbiapi/datasets/" + this.policy, "").map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.post("api/pbiapi/datasets/create/" + this.policy, JSON.stringify(this.datasetSchema), this.options).map(response => response.text()).subscribe(onNext, err => console.error(err));
         }
     }
 
@@ -65,25 +59,25 @@ export class PBIApiService {
 
     updateTableSchema(onNext: (json: any) => void) {
         if (this.useGroup) {
-            this.http.put("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName, this.tableSchema).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.put("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/update/" + this.tableName, JSON.stringify(this.tableSchema), this.options).map(response => response.text()).subscribe(onNext, err => console.error(err));
         } else {
-            this.http.put("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName, this.tableSchema).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.put("api/pbiapi/datasets/" + this.datasetId + "/tables/update/" + this.tableName, JSON.stringify(this.tableSchema), this.options).map(response => response.text()).subscribe(onNext, err => console.error(err));
         }
     }
 
     addTableRows(onNext: (json: any) => void) {
         if (this.useGroup) {
-            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows", this.tableRows).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows/add", JSON.stringify(this.tableRows), this.options).map(response => response.text()).subscribe(onNext, err => console.error(err));
         } else {
-            this.http.post("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows", this.tableRows).map(response => response.json()).subscribe(onNext, err => console.error(err));
+            this.http.post("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows/add", JSON.stringify(this.tableRows), this.options).map(response => response.text()).subscribe(onNext, err => console.error(err));
         }
     }
 
     clearTable(onNext: (json: any) => void) {
         if (this.useGroup) {
-            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(response => response.text()).subscribe(onNext, err => console.error(err));
+            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/clear/" + this.tableName + "/rows").map(response => response.text()).subscribe(onNext, err => console.error(err));
         } else {
-            this.http.delete("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(response => response.text()).subscribe(onNext, err => console.error(err));
+            this.http.delete("api/pbiapi/datasets/" + this.datasetId + "/tables/clear/" + this.tableName + "/rows").map(response => response.text()).subscribe(onNext, err => console.error(err));
         }
     }
 }

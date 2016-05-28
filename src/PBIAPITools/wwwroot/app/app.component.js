@@ -11,6 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var pbiapi_component_1 = require("./pbiapi.component");
+var about_component_1 = require("./about.component");
+var contact_component_1 = require("./contact.component");
 var PBIAPIToolsApp = (function () {
     function PBIAPIToolsApp(router) {
         this.router = router;
@@ -24,15 +26,20 @@ var PBIAPIToolsApp = (function () {
     PBIAPIToolsApp = __decorate([
         core_1.Component({
             selector: "app",
-            template: "<div class=\"page-header\">\n                    <h1>PowerBI API Tools</h1>\n                </div>\n                <nav class=\"navbar navbar-inverse\">\n                    <div class=\"container-fluid\">\n                        <div class=\"navbar-header\">\n                            <a class=\"navbar-brand\" href=\"#\">\n                                <span class=\"glyphicon glyphicon-sunglasses\"></span>\n                            </a>\n                        </div>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/home')\">\n                                <a [routerLink]=\"['/home']\">Home</a>\n                            </li>\n                        </ul>\n                    </div>\n                </nav>\n                <div class=\"content padding has-header\">\n                    <router-outlet></router-outlet>\n                </div>",
+            template: "<div class=\"page-header\">\n                    <h1>PowerBI API Tools</h1>\n                </div>\n                <nav class=\"navbar navbar-inverse\">\n                    <div class=\"container-fluid\">\n                        <div class=\"navbar-header\">\n                            <a class=\"navbar-brand\" href=\"#\">\n                                <span class=\"glyphicon glyphicon-sunglasses\"></span>\n                            </a>\n                        </div>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/home')\">\n                                <a [routerLink]=\"['/home']\">Home</a>\n                            </li>\n                        </ul>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/about')\">\n                                <a [routerLink]=\"['/about']\">About</a>\n                            </li>\n                        </ul>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/contact')\">\n                                <a [routerLink]=\"['/contact']\">Contact</a>\n                            </li>\n                        </ul>\n                    </div>\n                </nav>\n                <div class=\"content padding has-header\">\n                    <router-outlet></router-outlet>\n                </div>",
             directives: [router_1.ROUTER_DIRECTIVES]
         }),
         router_1.Routes([
             { path: '/home', component: pbiapi_component_1.PBIApiComponent },
-            { path: '/Home', component: pbiapi_component_1.PBIApiComponent }
+            { path: '/Home', component: pbiapi_component_1.PBIApiComponent },
+            { path: '/about', component: about_component_1.AboutComponent },
+            { path: '/About', component: about_component_1.AboutComponent },
+            { path: '/contact', component: contact_component_1.ContactComponent },
+            { path: '/Contact', component: contact_component_1.ContactComponent }
         ]), 
         __metadata('design:paramtypes', [router_1.Router])
     ], PBIAPIToolsApp);
     return PBIAPIToolsApp;
 }());
 exports.PBIAPIToolsApp = PBIAPIToolsApp;
+//# sourceMappingURL=app.component.js.map

@@ -19,9 +19,10 @@
 
     <div style="height: 20px">
         <span *ngIf="isLoading">Loading...</span>
+        <span *ngIf="message" style="font-weight: bold">{{message}}</span>
     </div>
     <div class="grey-border">
-        <div class="form-group">
+        <div class="form-group" style="padding-bottom: 10px; border-bottom: 1px solid black;">
             <button type="button" (click)="getGroups()" class="btn btn-primary">
                 Get Groups
             </button>
@@ -30,74 +31,114 @@
                 <option *ngFor="let group of groups" [value]="group.Id">{{group.Name}}</option>
             </select>
         </div>
-        <div class="form-group">
-            <button type="button" (click)="getDatasets()" class="btn btn-primary">
+        <div class="form-group" style="padding-bottom: 10px; border-bottom: 1px solid black;">
+            <button type="button" (click)="getDatasets(true)" class="btn btn-primary">
                 Get Datasets
             </button>
-            <button type="button" (click)="deleteDataset()" class="btn btn-primary">
+            <button type="button" (click)="modalOpen(confirmModal, 'deleteDataset')" class="btn btn-default">
                 Delete Dataset
             </button>
-            <button type="button" (click)="createDataset()" class="btn btn-primary">
+            <button type="button" (click)="modalOpen(createModal, 'createDataset', 'lg')" class="btn btn-default">
                 Create Dataset
-            </button>
-            <button type="button" (click)="setRetentionPolicy('none')" class="btn btn-primary" title="None">
-                Set Retention Policy to None
-            </button>
-            <button type="button" (click)="setRetentionPolicy('basicFIFO')" class="btn btn-primary" title="When enabled, data will collect in a table until it hits 200,000 rows. Once the data goes beyond 200,000 rows, the oldest rows will get dropped from the dataset. This will maintain between 200,000 and 210,000 rows of only the latest data.">
-                Set Retention Policy to Basic FIFO
             </button>
             <select [(ngModel)]="datasetId" class="form-control">
                 <option *ngFor="let dataset of datasets" [value]="dataset.Id">{{dataset.Name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <button type="button" (click)="getTables()" class="btn btn-primary">
+            <button type="button" (click)="getTables(true)" class="btn btn-primary">
                 Get Tables
             </button>
-            <select [(ngModel)]="tableName" class="form-control" (changed)="getTable()">
+            <select [(ngModel)]="tableName" class="form-control">
                 <option *ngFor="let table of tables" [value]="table.Name">{{table.Name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <button type="button" (click)="clearTable()" class="btn btn-primary">
+            <button type="button" (click)="modalOpen(confirmModal, 'clearTable')" class="btn btn-default">
                 Clear Table
             </button>
-            <button type="button" (click)="updateTableSchema()" class="btn btn-primary">
+            <button type="button" (click)="modalOpen(createModal, 'updateTableSchema', 'lg')" class="btn btn-default">
                 Update Table Schema
             </button>
-            <button type="button" (click)="addTableRows()" class="btn btn-primary">
+            <button type="button" (click)="modalOpen(createModal, 'addTableRows', 'lg')" class="btn btn-default">
                 Add Table Rows
             </button>
         </div>
-        <div class="contentTableWrapper">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <th>Data type</th>
-                        <th>Restrictions</th>
-                    </tr>
-                    <tr>
-                        <td>Int64</td>
-                        <td>Int64.MaxValue and Int64.MinValue not allowed.</td>
-                    </tr>
-                    <tr>
-                        <td>Double</td>
-                        <td>Double.MaxValue and Double.MinValue values not allowed. NaN not supported.+Infinity and -Infinity not supported in some functions (e.g. Min, Max).</td>
-                    </tr>
-                    <tr>
-                        <td>Boolean</td>
-                        <td>None</td>
-                    </tr>
-                    <tr>
-                        <td>Datetime</td>
-                        <td>During data loading we quantize values with day fractions to whole multiples of 1/300 seconds (3.33ms).</td>
-                    </tr>
-                    <tr>
-                        <td>String</td>
-                        <td>Currently allows up to 128K characters.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
+    <modal [animation]="animationsEnabled" #confirmModal>
+        <modal-header [show-close]="true">
+            <h4 class="modal-title">Please confirm</h4>
+        </modal-header>
+        <modal-body>
+            {{modalContent}}
+        </modal-body>
+        <modal-footer>
+            <button type="button" class="btn btn-default" data-dismiss="confirmModal" (click)="confirmModal.dismiss()">No</button>
+            <button type="button" class="btn btn-primary" (click)="confirmed()">Yes</button>
+        </modal-footer>
+    </modal>
+    <modal [animation]="animationsEnabled" #createModal>
+        <modal-header [show-close]="true">
+            <h4 class="modal-title">Create Dataset</h4>
+        </modal-header>
+        <modal-body>
+            <div>
+                <p>
+                    The box below is initially loaded with a sample schema. Please modify it as needed.
+                    You can verify proper json syntax by clicking on this link ... <a href="http://jsonlint.com/?json={{schemaContent}}" target="_new">Check with JSONLint</a><br />
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="retentionPolicy">Retention Policy</label>
+                <div *ngIf="showPolicy">
+                    <select id="retentionPolicy" [(ngModel)]="policy" class="form-control" title="Basic FIFO - data will collect in a table until it hits 200,000 rows. Once the data goes beyond 200,000 rows, the oldest rows will get dropped from the dataset. This will maintain between 200,000 and 210,000 rows of only the latest data.">
+                        <option value="None">None</option>
+                        <option value="basicFIFO">Basic First In First Out</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea [(ngModel)]="schemaContent" rows="20" class="form-control" style="min-width: 100%">{{schemaContent}}</textarea>
+            </div>
+            <div class="form-group" *ngIf="showDataTypes">
+                <label for="dataTypeTable">
+                    This is a table of the data types available for each column in your schema
+                </label>
+                <div class="table-responsive">
+                    <table id="dataTypeTable" class="table table-striped">
+                        <tbody>
+                            <tr style="white-space:nowrap;">
+                                <th>Data Type</th>
+                                <th>Restrictions</th>
+                            </tr>
+                            <tr>
+                                <td>Int64</td>
+                                <td>Int64.MaxValue and Int64.MinValue not allowed.</td>
+                            </tr>
+                            <tr>
+                                <td>Double</td>
+                                <td>Double.MaxValue and Double.MinValue values not allowed. NaN not supported.+Infinity and -Infinity not supported in some functions (e.g. Min, Max).</td>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <td>Datetime</td>
+                                <td>During data loading we quantize values with day fractions to whole multiples of 1/300 seconds (3.33ms).</td>
+                            </tr>
+                            <tr>
+                                <td>String</td>
+                                <td>Currently allows up to 128K characters.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </modal-body>
+        <modal-footer>
+            <button type="button" class="btn btn-default" data-dismiss="createModal" (click)="createModal.dismiss()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="createModalClick()">{{createModalText}}</button>
+        </modal-footer>
+    </modal>
 </pbiapi>

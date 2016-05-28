@@ -14,6 +14,8 @@ require("./rxjs.operators");
 var PBIApiService = (function () {
     function PBIApiService(http) {
         this.http = http;
+        this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        this.options = new http_1.RequestOptions({ headers: this.headers });
     }
     PBIApiService.prototype.get = function (onNext) {
         this.http.get("api/pbiapi").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
@@ -31,26 +33,18 @@ var PBIApiService = (function () {
     };
     PBIApiService.prototype.deleteDataset = function (onNext) {
         if (this.useGroup) {
-            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/delete/" + this.datasetId).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
         else {
-            this.http.delete("api/pbiapi/datasets/" + this.datasetId).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.delete("api/pbiapi/datasets/delete/" + this.datasetId).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
     };
     PBIApiService.prototype.createDataset = function (onNext) {
         if (this.useGroup) {
-            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets", this.datasetSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/create/" + this.policy, JSON.stringify(this.datasetSchema), this.options).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
         else {
-            this.http.post("api/pbiapi/datasets", this.datasetSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
-        }
-    };
-    PBIApiService.prototype.setRetentionPolicy = function (onNext) {
-        if (this.useGroup) {
-            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.policy, "").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
-        }
-        else {
-            this.http.post("api/pbiapi/datasets/" + this.policy, "").map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.post("api/pbiapi/datasets/create/" + this.policy, JSON.stringify(this.datasetSchema), this.options).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
     };
     PBIApiService.prototype.getTables = function (onNext) {
@@ -63,26 +57,26 @@ var PBIApiService = (function () {
     };
     PBIApiService.prototype.updateTableSchema = function (onNext) {
         if (this.useGroup) {
-            this.http.put("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName, this.tableSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.put("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/update/" + this.tableName, JSON.stringify(this.tableSchema), this.options).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
         else {
-            this.http.put("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName, this.tableSchema).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.put("api/pbiapi/datasets/" + this.datasetId + "/tables/update/" + this.tableName, JSON.stringify(this.tableSchema), this.options).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
     };
     PBIApiService.prototype.addTableRows = function (onNext) {
         if (this.useGroup) {
-            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows", this.tableRows).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.post("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows/add", JSON.stringify(this.tableRows), this.options).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
         else {
-            this.http.post("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows", this.tableRows).map(function (response) { return response.json(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.post("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows/add", JSON.stringify(this.tableRows), this.options).map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
     };
     PBIApiService.prototype.clearTable = function (onNext) {
         if (this.useGroup) {
-            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.delete("api/pbiapi/groups/" + this.groupId + "/datasets/" + this.datasetId + "/tables/clear/" + this.tableName + "/rows").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
         else {
-            this.http.delete("api/pbiapi/datasets/" + this.datasetId + "/tables/" + this.tableName + "/rows").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
+            this.http.delete("api/pbiapi/datasets/" + this.datasetId + "/tables/clear/" + this.tableName + "/rows").map(function (response) { return response.text(); }).subscribe(onNext, function (err) { return console.error(err); });
         }
     };
     PBIApiService = __decorate([
@@ -92,3 +86,4 @@ var PBIApiService = (function () {
     return PBIApiService;
 }());
 exports.PBIApiService = PBIApiService;
+//# sourceMappingURL=pbiapi.service.js.map

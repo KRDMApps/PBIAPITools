@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PBIAPITools.Models;
@@ -18,10 +19,12 @@ namespace PBIAPITools.Controllers
             TypeNameHandling = TypeNameHandling.All
         };
         private AppSettings appSettings { get; set; }
+        private readonly ILogger<PBIAPIController> _logger;
 
-        public PBIAPIController(IOptions<AppSettings> settings)
+        public PBIAPIController(IOptions<AppSettings> settings, ILogger<PBIAPIController> logger)
         {
             appSettings = settings.Value;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -64,6 +67,7 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in GetGroups: ", ex);
                 return StatusCode(500);
             }
         }
@@ -95,6 +99,7 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in GetDatasets: ", ex);
                 return StatusCode(500);
             }
         }
@@ -126,12 +131,13 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in GetDatasets: ", ex);
                 return StatusCode(500);
             }
         }
 
-        [HttpPost("datasets/{policy}")]
-        public async Task<IActionResult> CreateDataset(string policy, [FromBody] Dataset dataset)
+        [HttpPost("datasets/create/{policy}")]
+        public async Task<IActionResult> CreateDataset(string policy, [FromBody] string datasetJson)
         {
             try
             {
@@ -142,9 +148,7 @@ namespace PBIAPITools.Controllers
                 var client = new HttpClient();
                 string accessToken = GetSessionAccessToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var json = JsonConvert.SerializeObject(dataset);
-                byte[] byteArray = Encoding.UTF8.GetBytes(json);
-                ByteArrayContent content = new ByteArrayContent(byteArray);
+                StringContent content = new StringContent(datasetJson, Encoding.UTF8, "application/json");
                 var httpResponse = await client.PostAsync(apiUri, content);
 
                 if (!string.IsNullOrEmpty(accessToken))
@@ -158,28 +162,13 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in CreateDataset: ", ex);
                 return StatusCode(500);
             }
-            //{
-            // "name": "SalesMarketing",
-            //   "tables": 
-            //   [
-            //     {
-            //       "name": "Product", "columns": 
-            //         [
-            //           { "name": "ProductID", "dataType": "Int64"},
-            //           { "name": "Name", "dataType": "string"},
-            //           { "name": "Category", "dataType": "string"},
-            //           { "name": "IsCompete", "dataType": "bool"},
-            //           { "name": "ManufacturedOn", "dataType": "DateTime"}
-            //         ]
-            //      }
-            //    ]
-            //}
         }
 
-        [HttpPost("groups/{groupId}/datasets/{policy}")]
-        public async Task<IActionResult> CreateDataset(string groupId, string policy, [FromBody] Dataset dataset)
+        [HttpPost("groups/{groupId}/datasets/create/{policy}")]
+        public async Task<IActionResult> CreateDataset(string groupId, string policy, [FromBody] string datasetJson)
         {
             try
             {
@@ -190,9 +179,7 @@ namespace PBIAPITools.Controllers
                 var client = new HttpClient();
                 string accessToken = GetSessionAccessToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var json = JsonConvert.SerializeObject(dataset);
-                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(json);
-                ByteArrayContent content = new ByteArrayContent(byteArray);
+                StringContent content = new StringContent(datasetJson, Encoding.UTF8, "application/json");
                 var httpResponse = await client.PostAsync(apiUri, content);
 
                 if (!string.IsNullOrEmpty(accessToken))
@@ -206,27 +193,12 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in CreateDataset: ", ex);
                 return StatusCode(500);
             }
-            //{
-            // "name": "SalesMarketing",
-            //   "tables": 
-            //   [
-            //     {
-            //       "name": "Product", "columns": 
-            //         [
-            //           { "name": "ProductID", "dataType": "Int64"},
-            //           { "name": "Name", "dataType": "string"},
-            //           { "name": "Category", "dataType": "string"},
-            //           { "name": "IsCompete", "dataType": "bool"},
-            //           { "name": "ManufacturedOn", "dataType": "DateTime"}
-            //         ]
-            //      }
-            //    ]
-            //}
         }
 
-        [HttpDelete("datasets/{datasetId}")]
+        [HttpDelete("datasets/delete/{datasetId}")]
         public async Task<IActionResult> DeleteDataset(string datasetId)
         {
             try
@@ -244,18 +216,19 @@ namespace PBIAPITools.Controllers
                 {
                     httpResponse.EnsureSuccessStatusCode();
 
-                    return new NoContentResult();
+                    return Ok("success");
                 }
 
                 return Forbid();
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in DeleteDataset: ", ex);
                 return StatusCode(500);
             }
         }
 
-        [HttpDelete("groups/{groupId}/datasets/{datasetId}")]
+        [HttpDelete("groups/{groupId}/datasets/delete/{datasetId}")]
         public async Task<IActionResult> DeleteDataset(string groupId, string datasetId)
         {
             try
@@ -273,36 +246,6 @@ namespace PBIAPITools.Controllers
                 {
                     httpResponse.EnsureSuccessStatusCode();
 
-                    return new NoContentResult();
-                }
-
-                return Forbid();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPost("datasets/{policy}")]
-        public async Task<IActionResult> SetRetentionPolicy(string policy)
-        {
-            try
-            {
-                string responseContent = string.Empty;
-                //The resource Uri to the Power BI REST API resource
-                string apiUri = appSettings.PowerBIAPIUri + "/v1.0/myorg/datasets?defaultRetentionPolicy=" + policy;
-
-                var client = new HttpClient();
-                string accessToken = GetSessionAccessToken();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                StringContent content = new StringContent(string.Empty);
-                var httpResponse = await client.PostAsync(apiUri, content);
-
-                if (!string.IsNullOrEmpty(accessToken))
-                {
-                    httpResponse.EnsureSuccessStatusCode();
-
                     return Ok("success");
                 }
 
@@ -310,36 +253,7 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPost("groups/{groupId}/datasets/{policy}")]
-        public async Task<IActionResult> SetRetentionPolicy(string groupId, string policy)
-        {
-            try
-            {
-                string responseContent = string.Empty;
-                //The resource Uri to the Power BI REST API resource
-                string apiUri = appSettings.PowerBIAPIUri + "/v1.0/myorg/groups/" + groupId + "/datasets?defaultRetentionPolicy=" + policy;
-
-                var client = new HttpClient();
-                string accessToken = GetSessionAccessToken();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                StringContent content = new StringContent(string.Empty);
-                var httpResponse = await client.PostAsync(apiUri, content);
-
-                if (!string.IsNullOrEmpty(accessToken))
-                {
-                    httpResponse.EnsureSuccessStatusCode();
-
-                    return Ok("success");
-                }
-
-                return Forbid();
-            }
-            catch (Exception ex)
-            {
+                _logger.LogError("Error in DeleteDataset: ", ex);
                 return StatusCode(500);
             }
         }
@@ -371,6 +285,7 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in GetTables: ", ex);
                 return StatusCode(500);
             }
         }
@@ -402,12 +317,13 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in GetTables: ", ex);
                 return StatusCode(500);
             }
         }
 
-        [HttpPut("datasets/{datasetId}/tables/{tableName}")]
-        public async Task<IActionResult> UpdateTableSchema(string datasetId, string tableName, [FromBody] Table table)
+        [HttpPut("datasets/{datasetId}/tables/update/{tableName}")]
+        public async Task<IActionResult> UpdateTableSchema(string datasetId, string tableName, [FromBody] string tableJson)
         {
             try
             {
@@ -418,9 +334,7 @@ namespace PBIAPITools.Controllers
                 var client = new HttpClient();
                 string accessToken = GetSessionAccessToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var json = JsonConvert.SerializeObject(table);
-                byte[] byteArray = Encoding.UTF8.GetBytes(json);
-                ByteArrayContent content = new ByteArrayContent(byteArray);
+                StringContent content = new StringContent(tableJson, Encoding.UTF8, "application/json");
                 var httpResponse = await client.PutAsync(apiUri, content);
 
                 if (!string.IsNullOrEmpty(accessToken))
@@ -434,23 +348,13 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in UpdateTableSchema: ", ex);
                 return StatusCode(500);
             }
-            //{
-            //"name": "Product", "columns": 
-            //    [
-            //        { "name": "ProductID", "dataType": "Int64"},
-            //        { "name": "Name", "dataType": "string"},
-            //        { "name": "Category", "dataType": "string"},
-            //        { "name": "IsCompete", "dataType": "bool"},
-            //        { "name": "ManufacturedOn", "dataType": "DateTime"},
-            //        { "name": "NewColumn", "dataType": "string"}
-            //    ]
-            //}
         }
 
-        [HttpPut("groups/{groupId}/datasets/{datasetId}/tables/{tableName}")]
-        public async Task<IActionResult> UpdateTableSchema(string groupId, string datasetId, string tableName, [FromBody] Table table)
+        [HttpPut("groups/{groupId}/datasets/{datasetId}/tables/update/{tableName}")]
+        public async Task<IActionResult> UpdateTableSchema(string groupId, string datasetId, string tableName, [FromBody] string tableJson)
         {
             try
             {
@@ -461,9 +365,7 @@ namespace PBIAPITools.Controllers
                 var client = new HttpClient();
                 string accessToken = GetSessionAccessToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var json = JsonConvert.SerializeObject(table);
-                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(json);
-                ByteArrayContent content = new ByteArrayContent(byteArray);
+                StringContent content = new StringContent(tableJson, Encoding.UTF8, "application/json");
                 var httpResponse = await client.PutAsync(apiUri, content);
 
                 if (!string.IsNullOrEmpty(accessToken))
@@ -477,23 +379,13 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in UpdateTableSchema: ", ex);
                 return StatusCode(500);
             }
-            //{
-            //"name": "Product", "columns": 
-            //    [
-            //        { "name": "ProductID", "dataType": "Int64"},
-            //        { "name": "Name", "dataType": "string"},
-            //        { "name": "Category", "dataType": "string"},
-            //        { "name": "IsCompete", "dataType": "bool"},
-            //        { "name": "ManufacturedOn", "dataType": "DateTime"},
-            //        { "name": "NewColumn", "dataType": "string"}
-            //    ]
-            //}
         }
 
-        [HttpPost("datasets/{datasetId}/tables/{tableName}/rows")]
-        public async Task<IActionResult> AddTableRows(string datasetId, string tableName, [FromBody] string rows)
+        [HttpPost("datasets/{datasetId}/tables/{tableName}/rows/add")]
+        public async Task<IActionResult> AddTableRows(string datasetId, string tableName, [FromBody] string rowsJson)
         {
             try
             {
@@ -504,7 +396,7 @@ namespace PBIAPITools.Controllers
                 var client = new HttpClient();
                 string accessToken = GetSessionAccessToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                StringContent content = new StringContent(rows);
+                StringContent content = new StringContent(rowsJson, Encoding.UTF8, "application/json");
                 var httpResponse = await client.PostAsync(apiUri, content);
 
                 if (!string.IsNullOrEmpty(accessToken))
@@ -518,24 +410,13 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in AddTableRows: ", ex);
                 return StatusCode(500);
             }
-            //{
-            //   "rows": 
-            //   [
-            //         {
-            //            "ProductID":1,
-            //            "Name":"Adjustable Race",
-            //            "Category":"Components",
-            //            "IsCompete":true,
-            //            "ManufacturedOn":"07/30/2014"
-            //       }
-            //   ]
-            //}
         }
 
-        [HttpPost("groups/{groupId}/datasets/{datasetId}/tables/{tableName}/rows")]
-        public async Task<IActionResult> AddTableRows(string groupId, string datasetId, string tableName, [FromBody] string rows)
+        [HttpPost("groups/{groupId}/datasets/{datasetId}/tables/{tableName}/rows/add")]
+        public async Task<IActionResult> AddTableRows(string groupId, string datasetId, string tableName, [FromBody] string rowsJson)
         {
             try
             {
@@ -546,7 +427,7 @@ namespace PBIAPITools.Controllers
                 var client = new HttpClient();
                 string accessToken = GetSessionAccessToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                StringContent content = new StringContent(rows);
+                StringContent content = new StringContent(rowsJson, Encoding.UTF8, "application/json");
                 var httpResponse = await client.PostAsync(apiUri, content);
 
                 if (!string.IsNullOrEmpty(accessToken))
@@ -560,23 +441,12 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in AddTableRows: ", ex);
                 return StatusCode(500);
             }
-            //{
-            //   "rows": 
-            //   [
-            //         {
-            //            "ProductID":1,
-            //            "Name":"Adjustable Race",
-            //            "Category":"Components",
-            //            "IsCompete":true,
-            //            "ManufacturedOn":"07/30/2014"
-            //       }
-            //   ]
-            //}
         }
 
-        [HttpDelete("datasets/{datasetId}/tables/{tableName}/rows")]
+        [HttpDelete("datasets/{datasetId}/tables/clear/{tableName}/rows")]
         public async Task<IActionResult> ClearTable(string datasetId, string tableName)
         {
             try
@@ -601,11 +471,12 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in ClearTable: ", ex);
                 return StatusCode(500);
             }
         }
 
-        [HttpDelete("groups/{groupId}/datasets/{datasetId}/tables/{tableName}/rows")]
+        [HttpDelete("groups/{groupId}/datasets/{datasetId}/tables/clear/{tableName}/rows")]
         public async Task<IActionResult> ClearTable(string groupId, string datasetId, string tableName)
         {
             try
@@ -630,6 +501,7 @@ namespace PBIAPITools.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error in ClearTable: ", ex);
                 return StatusCode(500);
             }
         }

@@ -8,9 +8,9 @@
     }
   },
   "AppSettings": {
-    "ClientID": "83f3d888-bdd9-46bf-a994-3b3310dacc44",
-    "ClientSecret": "eAHOtKm39R18/ylmuzuLAa46REfL++xT9gzwN8hUL2A=",
-    "RedirectUrl": "http://pbiapitools.azurewebsites.net/login",
+    "ClientID": "{Your app's ClientID}",
+    "ClientSecret": "{Your app's Client Secret}",
+    "RedirectUrl": "{Your app's redirect URL}",
     "ResourceUri": "https://analysis.windows.net/powerbi/api",
     "PowerBIAPIUri": "https://api.powerbi.com"
   }
