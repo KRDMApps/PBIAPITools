@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <environment names="Development">
+        <!-- Css -->
+        <link rel="stylesheet" asp-href-include="~/css/*.css">
+        <!-- Js -->
+        <script src="~/js/es6-shim/es6-shim.min.js"></script>
+        <script src="~/js/zone.js/dist/zone.js"></script>
+        <script src="~/js/reflect-metadata/Reflect.js"></script>
+        <script src="~/js/systemjs/dist/system.src.js"></script>
+        <script src="~/js/jquery/dist/jquery.js"></script>
+        <script src="~/js/bootstrap/dist/js/bootstrap.js"></script>
+    </environment>
+
+    <environment names="Production">
+        <!-- Css -->
+        <link rel="stylesheet" asp-href-include="~/css/*.min.css" asp-append-version="true">
+        <!-- Js -->
+        <script src="~/js/es6-shim/es6-shim.min.js"></script>
+        <script src="~/js/zone.js/dist/zone.js"></script>
+        <script src="~/js/reflect-metadata/Reflect.js"></script>
+        <script src="~/js/systemjs/dist/system.src.js"></script>
+        <script src="~/js/jquery/dist/jquery.js"></script>
+        <script src="~/js/bootstrap/dist/js/bootstrap.js"></script>
+    </environment>
+
+    <!-- Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
+    <script>
+        System.import('app')
+              .then(null, console.error.bind(console));
+    </script>
+</head>
+<base href="/" />
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>
