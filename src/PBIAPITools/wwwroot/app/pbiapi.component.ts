@@ -32,6 +32,7 @@ export class PBIApiComponent implements OnInit {
     showPolicy: boolean = false;
     openModal: ModalComponent;
     modalContent: string;
+    modalTitle: string;
     confirmed: any;
     message: string;
     policy: string = "basicFIFO";
@@ -227,6 +228,7 @@ export class PBIApiComponent implements OnInit {
     modalOpen(modal: ModalComponent, msgType: string, size: string) {
         this.message = "";
         this.openModal = modal;
+        this.modalTitle = "";
         this.modalContent = "";
         this.schemaContent = "";
         this.createModalText = "Create";
@@ -243,17 +245,20 @@ export class PBIApiComponent implements OnInit {
                 this.confirmed = this.clearTable;
                 break;
             case "createDataset":
+                this.modalTitle = "Create Dataset";
                 this.schemaContent = this.defaultDatasetSchema;
                 this.showDataTypes = true;
                 this.showPolicy = true;
                 this.createModalClick = this.createDataset;
                 break;
             case "addTableRows":
+                this.modalTitle = "Add Table Rows";
                 this.createModalText = "Add";
                 this.schemaContent = this.defaultTableRows;
                 this.createModalClick = this.addTableRows;
                 break;
             case "updateTableSchema":
+                this.modalTitle = "Update Table Schema";
                 this.createModalText = "Update";
                 this.schemaContent = this.defaultTableSchema;
                 this.createModalClick = this.updateTableSchema;
