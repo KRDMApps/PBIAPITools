@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Routes, Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {PBIApiComponent} from "./pbiapi.component";
+import {AboutComponent} from "./about.component";
+import {ContactComponent} from "./contact.component";
 declare var System: any;
 
 @Component({
@@ -20,6 +22,16 @@ declare var System: any;
                                 <a [routerLink]="['/home']">Home</a>
                             </li>
                         </ul>
+                        <ul class="nav navbar-nav">
+                            <li [class.active]="isActive('/about')">
+                                <a [routerLink]="['/about']">About</a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav">
+                            <li [class.active]="isActive('/contact')">
+                                <a [routerLink]="['/contact']">Contact</a>
+                            </li>
+                        </ul>
                     </div>
                 </nav>
                 <div class="content padding has-header">
@@ -29,7 +41,11 @@ declare var System: any;
 })
 @Routes([
     { path: '/home', component: PBIApiComponent },
-    { path: '/Home', component: PBIApiComponent }
+    { path: '/Home', component: PBIApiComponent },
+    { path: '/about', component: AboutComponent },
+    { path: '/About', component: AboutComponent },
+    { path: '/contact', component: ContactComponent },
+    { path: '/Contact', component: ContactComponent }
 ])
 export class PBIAPIToolsApp implements OnInit {
     constructor(private router: Router) {

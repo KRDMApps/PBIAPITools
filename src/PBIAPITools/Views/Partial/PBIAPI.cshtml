@@ -79,13 +79,15 @@
     </modal>
     <modal [animation]="animationsEnabled" #createModal>
         <modal-header [show-close]="true">
-            <h4 class="modal-title">Create Dataset</h4>
+            <h4 class="modal-title">{{modalTitle}}</h4>
         </modal-header>
         <modal-body>
             <div>
                 <p>
                     The box below is initially loaded with a sample schema. Please modify it as needed.
                     You can verify proper json syntax by clicking on this link ... <a href="http://jsonlint.com/?json={{schemaContent}}" target="_new">Check with JSONLint</a><br />
+                    <br />
+                    <b>Note:</b> The API does not provide the capability to read the existing schema. Please use the <a href="https://powerbi.microsoft.com/">Power BI interface</a> to find the correct values.
                 </p>
             </div>
             <div class="form-group">

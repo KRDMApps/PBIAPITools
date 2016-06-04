@@ -1,9 +1,13 @@
-﻿{
+{
   "version": "1.0.0-*",
   "compilationOptions": {
     "emitEntryPoint": true
   },
   "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0-rc2-3002702",
+      "type": "platform"
+    },
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview1-final",
       "type": "build"
@@ -24,9 +28,9 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc2-final",
     "Microsoft.AspNetCore.Session": "1.0.0-rc2-final",
     "Microsoft.AspNetCore.WebUtilities": "1.0.0-rc2-final",
-    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.10.305161347",
     "Microsoft.AspNetCore.SpaServices": "1.0.0-beta-000002",
-    "Newtonsoft.Json": "8.0.3"
+    "Newtonsoft.Json": "8.0.3",
+    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.10.305231913"
   },
   "tools": {
     "Microsoft.AspNetCore.Razor.Tools": {
@@ -40,12 +44,6 @@
   },
   "frameworks": {
     "netcoreapp1.0": {
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.0.0-rc2-3002702",
-          "type": "platform"
-        }
-      },
       "imports": [
         "dotnet5.6",
         "dnxcore50",

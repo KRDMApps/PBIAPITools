@@ -28,6 +28,8 @@ export class PBIApiComponent implements OnInit {
     datasetId: string;
     tableName: string;
     isLoading: boolean = false;
+    showDataTypes: boolean = false;
+    showPolicy: boolean = false;
     openModal: ModalComponent;
     modalContent: string;
     confirmed: any;
@@ -72,9 +74,9 @@ export class PBIApiComponent implements OnInit {
             }
         ]
     }`;
-    tableSchema: string = this.defaultTableSchema;
-    datasetSchema: string = this.defaultDatasetSchema;
-    tableRows: string = this.defaultTableRows;
+    schemaContent: string;
+    createModalText: string = "Create";
+    createModalClick = () => { };
 
     constructor(private service: PBIApiService, private router: Router) { }
 
@@ -90,6 +92,7 @@ export class PBIApiComponent implements OnInit {
                     this.router.navigate(["/login"]);
                 }
                 this.isLoading = false;
+                this.getGroups();
             }
         });
     }
@@ -102,12 +105,14 @@ export class PBIApiComponent implements OnInit {
                 this.groups = groups.value;
                 this.groupId = "0";
                 this.isLoading = false;
+                this.datasets = [];
+                this.tables = [];
             }
         });
     }
 
-    getDatasets() {
-        this.message = "";
+    getDatasets(clear: boolean) {
+        if (clear) this.message = "";
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
@@ -116,6 +121,7 @@ export class PBIApiComponent implements OnInit {
                 this.datasets = datasets.value;
                 this.datasetId = this.datasets[0]["Id"];
                 this.isLoading = false;
+                this.tables = [];
             }
         });
     }
@@ -131,6 +137,7 @@ export class PBIApiComponent implements OnInit {
             if (status) {
                 this.message = "Successfully deleted the selected dataset";
                 this.isLoading = false;
+                this.getDatasets(false);
             }
         });
     }
@@ -142,18 +149,18 @@ export class PBIApiComponent implements OnInit {
         this.service.groupId = this.groupId;
         this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
         this.service.policy = this.policy;
-        this.service.datasetSchema = JSON.stringify(JSON.parse(this.datasetSchema));
+        this.service.datasetSchema = JSON.stringify(JSON.parse(this.schemaContent));
         this.service.createDataset(status => {
             if (status) {
                 this.message = "Successfully created the dataset";
                 this.isLoading = false;
-                this.getDatasets();
+                this.getDatasets(false);
             }
         });
     }
 
-    getTables() {
-        this.message = "";
+    getTables(clear: boolean) {
+        if (clear) this.message = "";
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
@@ -169,12 +176,13 @@ export class PBIApiComponent implements OnInit {
 
     updateTableSchema() {
         this.message = "";
+        this.openModal.dismiss();
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
         this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
-        this.service.tableSchema = JSON.stringify(JSON.parse(this.tableSchema));
+        this.service.tableSchema = JSON.stringify(JSON.parse(this.schemaContent));
         this.service.updateTableSchema(status => {
             if (status) {
                 this.message = "Successfully updated the schema for the selected table";
@@ -185,12 +193,13 @@ export class PBIApiComponent implements OnInit {
 
     addTableRows() {
         this.message = "";
+        this.openModal.dismiss();
         this.isLoading = true;
         this.service.groupId = this.groupId;
         this.service.datasetId = this.datasetId;
         this.service.tableName = this.tableName;
         this.service.useGroup = this.groupId && this.groupId != "0" ? true : false;
-        this.service.tableRows = JSON.stringify(JSON.parse(this.tableRows));
+        this.service.tableRows = JSON.stringify(JSON.parse(this.schemaContent));
         this.service.addTableRows(status => {
             if (status) {
                 this.message = "Successfully added rows to the selected table";
@@ -219,6 +228,11 @@ export class PBIApiComponent implements OnInit {
         this.message = "";
         this.openModal = modal;
         this.modalContent = "";
+        this.schemaContent = "";
+        this.createModalText = "Create";
+        this.showDataTypes = false;
+        this.showPolicy = false;
+        this.createModalClick = () => { };
         switch (msgType) {
             case "deleteDataset":
                 this.modalContent = "Are you sure you would like to delete this dataset?";
@@ -227,6 +241,22 @@ export class PBIApiComponent implements OnInit {
             case "clearTable":
                 this.modalContent = "Are you sure you would like to clear this table's data?";
                 this.confirmed = this.clearTable;
+                break;
+            case "createDataset":
+                this.schemaContent = this.defaultDatasetSchema;
+                this.showDataTypes = true;
+                this.showPolicy = true;
+                this.createModalClick = this.createDataset;
+                break;
+            case "addTableRows":
+                this.createModalText = "Add";
+                this.schemaContent = this.defaultTableRows;
+                this.createModalClick = this.addTableRows;
+                break;
+            case "updateTableSchema":
+                this.createModalText = "Update";
+                this.schemaContent = this.defaultTableSchema;
+                this.createModalClick = this.updateTableSchema;
                 break;
         }
         modal.open(size);

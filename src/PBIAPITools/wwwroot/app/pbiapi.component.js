@@ -175,6 +175,7 @@ var PBIApiComponent = (function () {
     PBIApiComponent.prototype.modalOpen = function (modal, msgType, size) {
         this.message = "";
         this.openModal = modal;
+        this.modalTitle = "";
         this.modalContent = "";
         this.schemaContent = "";
         this.createModalText = "Create";
@@ -191,17 +192,20 @@ var PBIApiComponent = (function () {
                 this.confirmed = this.clearTable;
                 break;
             case "createDataset":
+                this.modalTitle = "Create Dataset";
                 this.schemaContent = this.defaultDatasetSchema;
                 this.showDataTypes = true;
                 this.showPolicy = true;
                 this.createModalClick = this.createDataset;
                 break;
             case "addTableRows":
+                this.modalTitle = "Add Table Rows";
                 this.createModalText = "Add";
                 this.schemaContent = this.defaultTableRows;
                 this.createModalClick = this.addTableRows;
                 break;
             case "updateTableSchema":
+                this.modalTitle = "Update Table Schema";
                 this.createModalText = "Update";
                 this.schemaContent = this.defaultTableSchema;
                 this.createModalClick = this.updateTableSchema;
