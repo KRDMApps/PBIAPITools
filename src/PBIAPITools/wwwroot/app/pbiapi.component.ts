@@ -259,6 +259,7 @@ export class PBIApiComponent implements OnInit {
                 break;
             case "updateTableSchema":
                 this.modalTitle = "Update Table Schema";
+                this.showDataTypes = true;
                 this.createModalText = "Update";
                 this.schemaContent = this.defaultTableSchema;
                 this.createModalClick = this.updateTableSchema;

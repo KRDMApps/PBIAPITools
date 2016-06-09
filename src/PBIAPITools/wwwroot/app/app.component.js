@@ -13,6 +13,7 @@ var router_1 = require('@angular/router');
 var pbiapi_component_1 = require("./pbiapi.component");
 var about_component_1 = require("./about.component");
 var contact_component_1 = require("./contact.component");
+var terms_component_1 = require("./terms.component");
 var PBIAPIToolsApp = (function () {
     function PBIAPIToolsApp(router) {
         this.router = router;
@@ -26,7 +27,7 @@ var PBIAPIToolsApp = (function () {
     PBIAPIToolsApp = __decorate([
         core_1.Component({
             selector: "app",
-            template: "<div class=\"page-header\">\n                    <h1>PowerBI API Tools</h1>\n                </div>\n                <nav class=\"navbar navbar-inverse\">\n                    <div class=\"container-fluid\">\n                        <div class=\"navbar-header\">\n                            <a class=\"navbar-brand\" href=\"#\">\n                                <span class=\"glyphicon glyphicon-sunglasses\"></span>\n                            </a>\n                        </div>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/home')\">\n                                <a [routerLink]=\"['/home']\">Home</a>\n                            </li>\n                        </ul>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/about')\">\n                                <a [routerLink]=\"['/about']\">About</a>\n                            </li>\n                        </ul>\n                        <ul class=\"nav navbar-nav\">\n                            <li [class.active]=\"isActive('/contact')\">\n                                <a [routerLink]=\"['/contact']\">Contact</a>\n                            </li>\n                        </ul>\n                    </div>\n                </nav>\n                <div class=\"content padding has-header\">\n                    <router-outlet></router-outlet>\n                </div>",
+            template: "<div class=\"page-header\">\n                    <h1>Power BI API Interface</h1>\n                </div>\n                <nav class=\"navbar navbar-default navbar-static-top\">\n                    <div class=\"container-fluid\">\n                        <div class=\"navbar-collapse collapse\">\n                            <ul class=\"nav navbar-nav navbar-left\">\n                                <li [class.active]=\"isActive('/home')\">\n                                    <a [routerLink]=\"['/home']\">Home</a>\n                                </li>\n                                <li [class.active]=\"isActive('/about')\">\n                                    <a [routerLink]=\"['/about']\">About</a>\n                                </li>\n                                <li [class.active]=\"isActive('/contact')\">\n                                    <a [routerLink]=\"['/contact']\">Contact</a>\n                                </li>\n                                <li [class.active]=\"isActive('/terms')\">\n                                    <a [routerLink]=\"['/terms']\">Terms&nbsp;&amp;&nbsp;Conditions</a>\n                                </li>\n                            </ul>\n                            <div class=\"pull-right logo\">\n                                <a href=\"http://www.neudesic.com\" target=\"_blank\"><img src=\"../images/neudesic_logo.png\" height=\"64\" alt=\"Neudesic\"></a>\n                            </div>\n                        </div>\n                    </div>\n                </nav>\n                <div class=\"content padding has-header\">\n                    <router-outlet></router-outlet>\n                </div>",
             directives: [router_1.ROUTER_DIRECTIVES]
         }),
         router_1.Routes([
@@ -35,7 +36,9 @@ var PBIAPIToolsApp = (function () {
             { path: '/about', component: about_component_1.AboutComponent },
             { path: '/About', component: about_component_1.AboutComponent },
             { path: '/contact', component: contact_component_1.ContactComponent },
-            { path: '/Contact', component: contact_component_1.ContactComponent }
+            { path: '/Contact', component: contact_component_1.ContactComponent },
+            { path: '/terms', component: terms_component_1.TermsComponent },
+            { path: '/Terms', component: terms_component_1.TermsComponent }
         ]), 
         __metadata('design:paramtypes', [router_1.Router])
     ], PBIAPIToolsApp);

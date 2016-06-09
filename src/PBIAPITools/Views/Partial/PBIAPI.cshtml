@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "PBIAPI";
+    ViewBag.Title = "Power BI API Interface";
 }
 <pbiapi>
     <style>
@@ -23,7 +23,7 @@
     </div>
     <div class="grey-border">
         <div class="form-group" style="padding-bottom: 10px; border-bottom: 1px solid black;">
-            <button type="button" (click)="getGroups()" class="btn btn-primary">
+            <button type="button" (click)="getGroups()" class="btn btn-success">
                 Get Groups
             </button>
             <select [(ngModel)]="groupId" class="form-control">
@@ -32,7 +32,7 @@
             </select>
         </div>
         <div class="form-group" style="padding-bottom: 10px; border-bottom: 1px solid black;">
-            <button type="button" (click)="getDatasets(true)" class="btn btn-primary">
+            <button type="button" (click)="getDatasets(true)" class="btn btn-success">
                 Get Datasets
             </button>
             <button type="button" (click)="modalOpen(confirmModal, 'deleteDataset')" class="btn btn-default">
@@ -46,7 +46,7 @@
             </select>
         </div>
         <div class="form-group">
-            <button type="button" (click)="getTables(true)" class="btn btn-primary">
+            <button type="button" (click)="getTables(true)" class="btn btn-success">
                 Get Tables
             </button>
             <select [(ngModel)]="tableName" class="form-control">

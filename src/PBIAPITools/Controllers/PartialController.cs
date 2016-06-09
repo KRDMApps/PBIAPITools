@@ -9,5 +9,7 @@ namespace PBIAPITools.Controllers
         public IActionResult About() => PartialView();
 
         public IActionResult Contact() => PartialView();
+
+        public IActionResult Terms() => PartialView();
     }
 }

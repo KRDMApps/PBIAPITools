@@ -31,3 +31,12 @@ textarea {
 .modal-footer .btn+.btn {
     margin-bottom: 10px !important;
 }
+
+.page-header {
+    /*background-image: url('../images/aa-banner.png');*/
+}
+
+.logo {
+    margin-top: -60px;
+    margin-right: -26px;
+}

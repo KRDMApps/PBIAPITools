@@ -3,12 +3,13 @@ import {Routes, Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {PBIApiComponent} from "./pbiapi.component";
 import {AboutComponent} from "./about.component";
 import {ContactComponent} from "./contact.component";
+import {TermsComponent} from "./terms.component";
 declare var System: any;
 
 @Component({
     selector: "app",
     template: `<div class="page-header">
-                    <h1>PowerBI API Tools</h1>
+                    <h1>Power BI API Interface</h1>
                 </div>
                 <nav class="navbar navbar-inverse">
                     <div class="container-fluid">
@@ -45,7 +46,9 @@ declare var System: any;
     { path: '/about', component: AboutComponent },
     { path: '/About', component: AboutComponent },
     { path: '/contact', component: ContactComponent },
-    { path: '/Contact', component: ContactComponent }
+    { path: '/Contact', component: ContactComponent },
+    { path: '/terms', component: TermsComponent },
+    { path: '/Terms', component: TermsComponent }
 ])
 export class PBIAPIToolsApp implements OnInit {
     constructor(private router: Router) {
