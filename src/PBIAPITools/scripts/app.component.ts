@@ -8,7 +8,10 @@ declare var System: any;
 
 @Component({
     selector: "app",
-    template: `<div class="page-header">
+    template: `<div class="logo">
+                    <a href="http://www.neudesic.com" target="_blank"><img src="../images/neudesic_logo.png" height="64" alt="Neudesic"></a>
+                </div>
+                <div class="page-header">
                     <h1>Power BI API Interface</h1>
                 </div>
                 <nav class="navbar navbar-default navbar-static-top">
@@ -28,9 +31,6 @@ declare var System: any;
                                     <a [routerLink]="['/terms']">Terms&nbsp;&amp;&nbsp;Conditions</a>
                                 </li>
                             </ul>
-                            <div class="pull-right logo">
-                                <a href="http://www.neudesic.com" target="_blank"><img src="../images/neudesic_logo.png" height="64" alt="Neudesic"></a>
-                            </div>
                         </div>
                     </div>
                 </nav>

@@ -22,4 +22,3 @@ var TermsComponent = (function () {
     return TermsComponent;
 }());
 exports.TermsComponent = TermsComponent;
-//# sourceMappingURL=terms.component.js.map

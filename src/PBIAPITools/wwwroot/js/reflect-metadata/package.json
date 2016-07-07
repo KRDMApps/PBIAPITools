@@ -1,21 +1,13 @@
 {
   "_args": [
     [
-      {
-        "name": "reflect-metadata",
-        "raw": "reflect-metadata@^0.1.3",
-        "rawSpec": "^0.1.3",
-        "scope": null,
-        "spec": ">=0.1.3 <0.2.0",
-        "type": "range"
-      },
-      "D:\\Projects\\PBIAPITools\\src\\PBIAPITools"
+      "reflect-metadata@^0.1.3",
+      "C:\\Projects\\PBIAPITools\\src\\PBIAPITools"
     ]
   ],
-  "_from": "reflect-metadata@>=0.1.3 <0.2.0",
+  "_from": "reflect-metadata@>=0.1.3-0 <0.2.0-0",
   "_id": "reflect-metadata@0.1.3",
   "_inCache": true,
-  "_installable": true,
   "_location": "/reflect-metadata",
   "_nodeVersion": "4.2.1",
   "_npmUser": {
@@ -29,7 +21,7 @@
     "raw": "reflect-metadata@^0.1.3",
     "rawSpec": "^0.1.3",
     "scope": null,
-    "spec": ">=0.1.3 <0.2.0",
+    "spec": ">=0.1.3-0 <0.2.0-0",
     "type": "range"
   },
   "_requiredBy": [
@@ -39,7 +31,7 @@
   "_shasum": "64f8a41974e4f5a5aa9978dac54cfd442dc2f1d5",
   "_shrinkwrap": null,
   "_spec": "reflect-metadata@^0.1.3",
-  "_where": "D:\\Projects\\PBIAPITools\\src\\PBIAPITools",
+  "_where": "C:\\Projects\\PBIAPITools\\src\\PBIAPITools",
   "author": {
     "email": "ron.buckton@microsoft.com",
     "name": "Ron Buckton",
@@ -60,10 +52,11 @@
   },
   "gitHead": "1affc8fcd1301caac47602e3738b057ecfd88830",
   "homepage": "http://rbuckton.github.io/ReflectDecorators",
+  "installable": true,
   "keywords": [
     "decorator",
-    "metadata",
     "javascript",
+    "metadata",
     "reflect"
   ],
   "license": "Apache-2.0",
@@ -76,13 +69,12 @@
   "main": "Reflect.js",
   "maintainers": [
     {
-      "email": "rbuckton@chronicles.org",
-      "name": "rbuckton"
+      "name": "rbuckton",
+      "email": "rbuckton@chronicles.org"
     }
   ],
   "name": "reflect-metadata",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rbuckton/ReflectDecorators.git"

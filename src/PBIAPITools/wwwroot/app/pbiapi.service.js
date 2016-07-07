@@ -86,4 +86,3 @@ var PBIApiService = (function () {
     return PBIApiService;
 }());
 exports.PBIApiService = PBIApiService;
-//# sourceMappingURL=pbiapi.service.js.map

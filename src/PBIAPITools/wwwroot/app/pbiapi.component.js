@@ -230,4 +230,3 @@ var PBIApiComponent = (function () {
     return PBIApiComponent;
 }());
 exports.PBIApiComponent = PBIApiComponent;
-//# sourceMappingURL=pbiapi.component.js.map

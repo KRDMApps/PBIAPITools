@@ -33,10 +33,13 @@ textarea {
 }
 
 .page-header {
-    /*background-image: url('../images/aa-banner.png');*/
+    text-align: center;
+}
+
+.page-header > h1 {
+    font-size: 50px;
 }
 
 .logo {
-    margin-top: -60px;
-    margin-right: -26px;
+    margin-bottom: -40px;
 }

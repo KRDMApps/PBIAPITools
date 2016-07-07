@@ -1,4 +1,1 @@
-body{}.body-content{padding-left:15px;padding-right:15px}input,select,textarea{max-width:280px}.carousel-caption p{font-size:20px;line-height:1.4}@media screen and (max-width:767px){.carousel-caption{display:none}}.modal-footer .btn+.btn {margin-bottom: 10px !important;}.page-header {} .logo {
-    margin-top: -60px;
-    margin-right: -26px;
-}
+body{}.body-content{padding-left:15px;padding-right:15px}input,select,textarea{max-width:280px}.carousel-caption p{font-size:20px;line-height:1.4}@media screen and (max-width:767px){.carousel-caption{display:none}}.modal-footer .btn+.btn {margin-bottom: 10px !important;}.page-header {text-align: center;}.page-header > h1 {font-size: 50px;}.logo {margin-bottom: -40px;}

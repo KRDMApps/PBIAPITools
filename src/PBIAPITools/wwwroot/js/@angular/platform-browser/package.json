@@ -1,21 +1,13 @@
 {
   "_args": [
     [
-      {
-        "name": "@angular/platform-browser",
-        "raw": "@angular/platform-browser@2.0.0-rc.1",
-        "rawSpec": "2.0.0-rc.1",
-        "scope": "@angular",
-        "spec": "2.0.0-rc.1",
-        "type": "version"
-      },
-      "D:\\Projects\\PBIAPITools\\src\\PBIAPITools"
+      "@angular/platform-browser@2.0.0-rc.1",
+      "C:\\Projects\\PBIAPITools\\src\\PBIAPITools"
     ]
   ],
   "_from": "@angular/platform-browser@2.0.0-rc.1",
   "_id": "@angular/platform-browser@2.0.0-rc.1",
   "_inCache": true,
-  "_installable": true,
   "_location": "/@angular/platform-browser",
   "_nodeVersion": "5.4.1",
   "_npmOperationalInternal": {
@@ -43,7 +35,7 @@
   "_shasum": "df97549f72f042d1c1180ebd451eb676416e40f8",
   "_shrinkwrap": null,
   "_spec": "@angular/platform-browser@2.0.0-rc.1",
-  "_where": "D:\\Projects\\PBIAPITools\\src\\PBIAPITools",
+  "_where": "C:\\Projects\\PBIAPITools\\src\\PBIAPITools",
   "author": {
     "name": "angular"
   },
@@ -55,13 +47,14 @@
     "shasum": "df97549f72f042d1c1180ebd451eb676416e40f8",
     "tarball": "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-2.0.0-rc.1.tgz"
   },
+  "installable": true,
   "jsnext:main": "esm/index.js",
   "license": "MIT",
   "main": "index.js",
   "maintainers": [
     {
-      "email": "angular-core+npm@google.com",
-      "name": "angular"
+      "name": "angular",
+      "email": "angular-core+npm@google.com"
     }
   ],
   "name": "@angular/platform-browser",
@@ -71,7 +64,6 @@
     "@angular/compiler": "2.0.0-rc.1",
     "@angular/core": "2.0.0-rc.1"
   },
-  "readme": "ERROR: No README data found!",
   "scripts": {},
   "typings": "index.d.ts",
   "version": "2.0.0-rc.1"
